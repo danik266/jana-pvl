@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
-// 1. Импортируем 'Image' для использования в новом футере
 import Image from "next/image";
-import { Home, Map, Scale, Construction, ArrowRight } from "lucide-react";
+// Добавили иконку Bot
+import { Home, Map, Scale, Bot, ArrowRight } from "lucide-react";
 import Header from "./components/Header/page";
 import Link from "next/link";
-// 1. Импортируем шрифт с поддержкой кириллицы
 import { Montserrat } from "next/font/google";
 
-// 2. Настраиваем шрифт (важно указать subset 'cyrillic')
 const font = Montserrat({
   subsets: ["cyrillic", "latin"],
-  weight: ["400", "500", "600", "700", "800"], // Загружаем нужные жирности
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export default function App() {
@@ -27,7 +25,6 @@ export default function App() {
       btnOpen: "Ашу",
       footer:
         "© 2025 Jana Pavlodar • Павлодар қаласы • Павлодар тұрғындары үшін ❤️ жасалған",
-      // Добавлено для нового футера
       madeIn: "Made In Kazakhstan",
       modules: {
         ErtisHome: {
@@ -45,10 +42,11 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Шағымдар мен өтініштер генераторы",
         },
-        ErtisRoad: {
-          title: "Көлік және жолдар",
-          subtitle: "Transportation & Roads",
-          desc: "Жол ақауларын анықтау және қауіптілікті бағалау",
+        // Обновленный блок ErtisAI
+        ErtisAI: {
+          title: "Jana Pavlodar AI",
+          subtitle: "City Assistant",
+          desc: "Қала бойынша кез келген сұраққа жауап беретін көмекші",
         },
       },
     },
@@ -77,10 +75,11 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Генератор жалоб и заявлений",
         },
-        ErtisRoad: {
-          title: "Транспорт и Дороги",
-          subtitle: "Transportation & Roads",
-          desc: "Обнаружение дефектов дорог и оценка рисков",
+        // Обновленный блок ErtisAI
+        ErtisAI: {
+          title: "AI Ассистент",
+          subtitle: "City Assistant",
+          desc: "Умный помощник по вопросам города и услуг",
         },
       },
     },
@@ -109,10 +108,11 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Complaint and application generator",
         },
-        ErtisRoad: {
-          title: "Transport & Roads",
-          subtitle: "Transportation & Roads",
-          desc: "Road defect detection and hazard assessment",
+        // Обновленный блок ErtisAI
+        ErtisAI: {
+          title: "City AI Chat",
+          subtitle: "City Assistant",
+          desc: "Smart assistant for any city-related questions",
         },
       },
     },
@@ -124,7 +124,8 @@ export default function App() {
     { id: "ErtisHome", icon: Home, ...t.modules.ErtisHome },
     { id: "ErtisTour", icon: Map, ...t.modules.ErtisTour },
     { id: "ErtisLaw", icon: Scale, ...t.modules.ErtisLaw },
-    { id: "ErtisRoad", icon: Construction, ...t.modules.ErtisRoad },
+    // Заменили ID на ErtisAI и иконку на Bot
+    { id: "ErtisAI", icon: Bot, ...t.modules.ErtisAI },
   ];
 
   return (
@@ -135,7 +136,7 @@ export default function App() {
         <div className="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-amber-200 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-10 flex-grow"> 
+      <div className="relative z-10 flex-grow">
         <Header currentLanguage={lang} onLanguageChange={setLang} />
 
         <div className="container mx-auto px-4 py-16">
@@ -148,7 +149,6 @@ export default function App() {
               </span>
             </div>
 
-            {/* Шрифты в заголовках Montserrat выглядят особенно круто */}
             <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-teal-400 to-sky-500">
                 Jana Pavlodar
@@ -167,11 +167,11 @@ export default function App() {
             {modules.map((module) => {
               const Icon = module.icon;
               return (
+                // Ссылка ведет на папку модуля, например /ErtisAI
                 <Link key={module.id} href={`/${module.id}`}>
                   <div className="group relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white shadow-xl hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
 
                     <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-300/50 rounded-3xl transition-colors duration-500 pointer-events-none" />
-
                     <div className="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out" />
 
                     <div className="relative flex-grow flex flex-col">
@@ -206,7 +206,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* НОВЫЙ ФУТЕР */}
+      {/* FOOTER */}
       <footer className="relative bg-slate-900 text-white py-10 mt-auto overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500"></div>
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center gap-4">
@@ -218,10 +218,7 @@ export default function App() {
               {t.madeIn}
             </span>
             <div className="relative flex items-center justify-center">
-              {/* Красное свечение сзади картинки */}
               <div className="absolute inset-0 bg-red-500 blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-full scale-150"></div>
-
-              {/* Обратите внимание: Image из next/image требует src и alt */}
               <Image
                 src="/tulip.png"
                 alt="Tulip of Kazakhstan"
@@ -231,7 +228,6 @@ export default function App() {
               />
             </div>
           </div>
-
         </div>
       </footer>
     </div>
