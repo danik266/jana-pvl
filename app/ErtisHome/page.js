@@ -11,7 +11,143 @@ import {
 } from "lucide-react";
 import Header from "../components/Header/page";
 
+// --- СЛОВАРЬ ПЕРЕВОДОВ ---
+const translations = {
+  ru: {
+    back: "Вернуться в меню",
+    aiOnline: "Система активна",
+    scannerTitle: "Smart Scanner",
+    scannerSubtitle: "AI Распознавание",
+    pressToScan: "Нажмите для сканирования",
+    init: "Инициализация...",
+    searching: "Поиск прибора...",
+    ocr: "Распознавание...",
+    verify: "Верификация...",
+    verified: "Данные верифицированы",
+    meterId: "ID прибора",
+    digitalMeter: "ЦИФРОВОЙ СЧЕТЧИК",
+    sendBtn: "Отправить показания",
+    sentSuccess: "Данные приняты",
+    sentDesc: "Показания будут переданы в ЕРЦ автоматически.",
+    servicesTitle: "Сервисы",
+    sosTitle: "Служба 109",
+    sosDesc: "Единый центр",
+    elecTitle: "Электрик",
+    elecDesc: "Вызов 24/7",
+    plumbTitle: "Сантехник",
+    plumbDesc: "Аварийка",
+    waiting: "Ожидание данных...",
+    waitingDesc: "Загрузите фото счетчика для передачи показаний",
+    modalSearch: "Поиск мастера...",
+    modalAddress: "Ваш адрес",
+    modalAddressPlace: "Улица, дом, квартира...",
+    modalCall: "Вызвать мастера",
+    modalCall109: "ПОЗВОНИТЬ 109",
+    modalArrival: "Прибытие:",
+    alertAddr: "Пожалуйста, введите адрес!",
+    alertSent: "Мастер выехал!\nАдрес: ",
+    alertWait: "\nОжидайте.",
+    footerMade: "Сделано в Казахстане",
+    footerText: "© 2025 Jana Pavlodar • г. Павлодар • Сделано с ❤️ для жителей",
+    
+    // Типы счетчиков
+    waterLabel: "Холодная вода",
+    electroLabel: "Электроэнергия",
+    heatLabel: "Теплоснабжение"
+  },
+  kz: {
+    back: "Мәзірге оралу",
+    aiOnline: "Жүйе белсенді",
+    scannerTitle: "Smart Сканер",
+    scannerSubtitle: "AI Анықтау",
+    pressToScan: "Сканерлеу үшін басыңыз",
+    init: "Іске қосу...",
+    searching: "Құрылғыны іздеу...",
+    ocr: "Мәтінді тану...",
+    verify: "Тексеру...",
+    verified: "Деректер расталды",
+    meterId: "Құрылғы ID",
+    digitalMeter: "ЦИФРЛЫҚ ЕСЕПТЕГІШ",
+    sendBtn: "Көрсеткішті жіберу",
+    sentSuccess: "Деректер қабылданды",
+    sentDesc: "Көрсеткіштер ЕРТО-ға автоматты түрде жіберіледі.",
+    servicesTitle: "Қызметтер",
+    sosTitle: "109 Қызметі",
+    sosDesc: "Бірыңғай орталық",
+    elecTitle: "Электрик",
+    elecDesc: "Шақыру 24/7",
+    plumbTitle: "Сантехник",
+    plumbDesc: "Апаттық қызмет",
+    waiting: "Деректерді күту...",
+    waitingDesc: "Көрсеткіштерді жіберу үшін суретін жүктеңіз",
+    modalSearch: "Шебер іздеу...",
+    modalAddress: "Сіздің мекенжайыңыз",
+    modalAddressPlace: "Көше, үй, пәтер...",
+    modalCall: "Шеберді шақыру",
+    modalCall109: "109-ҒА ҚОҢЫРАУ",
+    modalArrival: "Келу уақыты:",
+    alertAddr: "Мекенжайды енгізіңіз!",
+    alertSent: "Шебер жолға шықты!\nМекенжай: ",
+    alertWait: "\nКүтіңіз.",
+    footerMade: "Қазақстанда жасалған",
+    footerText: "© 2025 Jana Pavlodar • Павлодар қ. • Тұрғындарға ❤️ жасалған",
+
+    // Типы счетчиков
+    waterLabel: "Суық су",
+    electroLabel: "Электр энергиясы",
+    heatLabel: "Жылу жүйесі"
+  },
+  en: {
+    back: "Back to Menu",
+    aiOnline: "System Online",
+    scannerTitle: "Smart Scanner",
+    scannerSubtitle: "AI Recognition",
+    pressToScan: "Tap to scan",
+    init: "Initializing...",
+    searching: "Searching meter...",
+    ocr: "Processing...",
+    verify: "Verifying...",
+    verified: "Data Verified",
+    meterId: "Device ID",
+    digitalMeter: "DIGITAL METER",
+    sendBtn: "Send Data",
+    sentSuccess: "Data Sent",
+    sentDesc: "Readings will be automatically sent to the billing center.",
+    servicesTitle: "Services",
+    sosTitle: "SOS 109",
+    sosDesc: "Unified Center",
+    elecTitle: "Electrician",
+    elecDesc: "24/7 Call",
+    plumbTitle: "Plumber",
+    plumbDesc: "Emergency",
+    waiting: "Waiting for data...",
+    waitingDesc: "Upload a photo of the meter to send readings",
+    modalSearch: "Searching master...",
+    modalAddress: "Your Address",
+    modalAddressPlace: "Street, house, flat...",
+    modalCall: "Call Master",
+    modalCall109: "CALL 109",
+    modalArrival: "Arrival:",
+    alertAddr: "Please enter your address!",
+    alertSent: "Master is on the way!\nAddress: ",
+    alertWait: "\nPlease wait.",
+    footerMade: "Made in Kazakhstan",
+    footerText: "© 2025 Jana Pavlodar • Pavlodar City • Made with ❤️",
+
+    // Типы счетчиков
+    waterLabel: "Cold Water",
+    electroLabel: "Electricity",
+    heatLabel: "Heating"
+  }
+};
+
 export default function ErtisHome() {
+  // 1. СОСТОЯНИЕ ЯЗЫКА (По умолчанию Русский)
+  const [lang, setLang] = useState("ru");
+  
+  // Получаем нужный набор переводов
+  const t = translations[lang] || translations.ru;
+
   const [image, setImage] = useState(null);
   const [result, setResult] = useState("");
   
@@ -29,37 +165,48 @@ export default function ErtisHome() {
 
   const fileInputRef = useRef(null);
 
-  // КОНФИГУРАЦИЯ СЧЕТЧИКОВ (добавили decimals для красных цифр)
+  // Загрузка языка из localStorage при старте
+  useEffect(() => {
+    const savedLang = localStorage.getItem("lang");
+    if (savedLang && translations[savedLang]) {
+      setLang(savedLang);
+    }
+  }, []);
+
+  // Функция смены языка (передается в Header)
+  const handleLanguageChange = (code) => {
+    setLang(code);
+    localStorage.setItem("lang", code);
+  };
+
+  // КОНФИГУРАЦИЯ СЧЕТЧИКОВ (Теперь использует переводы t)
   const meterConfig = {
     water: { 
-      label: "Холодная вода", 
+      label: t.waterLabel, 
       id: "ГВС-1024",
       icon: <Droplets className="w-6 h-6"/>, 
       color: "text-cyan-500", 
       bg: "bg-cyan-50", 
       gradient: "from-cyan-500 to-blue-600",
-      digits: 8,     // Всего символов
-      decimals: 3    // Последние 3 - красные (литры)
+      digits: 8, decimals: 3
     },
     electro: { 
-      label: "Электроэнергия", 
+      label: t.electroLabel, 
       id: "EL-3492",
       icon: <Zap className="w-6 h-6"/>, 
       color: "text-yellow-500", 
       bg: "bg-yellow-50", 
       gradient: "from-yellow-400 to-orange-500",
-      digits: 7,     // Всего символов
-      decimals: 1    // Последняя 1 - красная (десятые)
+      digits: 7, decimals: 1
     },
     heat: { 
-      label: "Теплоснабжение", 
+      label: t.heatLabel, 
       id: "HEAT-991",
       icon: <Flame className="w-6 h-6"/>, 
       color: "text-orange-500", 
       bg: "bg-orange-50", 
       gradient: "from-orange-500 to-red-500",
-      digits: 8,     // Как у воды
-      decimals: 3
+      digits: 8, decimals: 3
     }
   };
 
@@ -68,36 +215,36 @@ export default function ErtisHome() {
     const services = {
       sos: { 
         id: 'sos',
-        title: "Экстренная служба", 
+        title: t.sosTitle, 
         color: "text-white", 
         bg: "bg-red-600", 
         icon: <Phone size={28} className="animate-pulse"/>, 
         name: "iKomek 109", 
         rating: "Official", 
-        desc: "Единый контакт-центр города",
-        time: "Круглосуточно" 
+        desc: t.sosDesc,
+        time: "24/7" 
       },
       electrician: { 
         id: 'master',
-        title: "Электрик", 
+        title: t.elecTitle, 
         color: "text-yellow-700", 
         bg: "bg-yellow-400", 
         icon: <Zap size={28}/>, 
         name: "Ержан К.", 
         rating: "4.9", 
-        desc: "Мастер 1-й категории",
-        time: "Прибытие ~15 мин" 
+        desc: t.elecDesc,
+        time: "~15 min" 
       },
       plumber: { 
         id: 'master',
-        title: "Сантехник", 
+        title: t.plumbTitle, 
         color: "text-blue-700", 
         bg: "bg-blue-400", 
         icon: <Droplets size={28}/>, 
         name: "Андрей С.", 
         rating: "4.8", 
-        desc: "Устранение протечек",
-        time: "Прибытие ~10 мин" 
+        desc: t.plumbDesc,
+        time: "~10 min" 
       },
     };
     
@@ -124,10 +271,10 @@ export default function ErtisHome() {
     }
 
     if(!userAddress) {
-      alert("Пожалуйста, введите адрес!");
+      alert(t.alertAddr);
       return;
     }
-    alert(`Мастер выехал!\nАдрес: ${userAddress}\nОжидайте.`);
+    alert(`${t.alertSent}${userAddress}${t.alertWait}`);
     closeServiceModal();
   }
 
@@ -141,14 +288,14 @@ export default function ErtisHome() {
     setResult("");
     setIsSent(false); 
     setIsScanning(true);
-    setStatusText("Инициализация камеры...");
+    setStatusText(t.init);
 
     try {
-      setStatusText("Поиск прибора учета...");
+      setStatusText(t.searching);
       await new Promise(r => setTimeout(r, 800));
-      setStatusText("Оптическое распознавание...");
+      setStatusText(t.ocr);
       await new Promise(r => setTimeout(r, 1000));
-      setStatusText("Верификация данных...");
+      setStatusText(t.verify);
       await new Promise(r => setTimeout(r, 700));
 
       let finalNumber = "";
@@ -179,7 +326,12 @@ export default function ErtisHome() {
 
   return (
     <>
-      <Header />
+      <Header 
+        currentLanguage={lang}
+        onLanguageChange={handleLanguageChange}
+        showBackButton={true}
+        onBackToHome={() => window.location.href = '/'}
+      />
       <div className="min-h-screen bg-[#F8FAFC] selection:bg-sky-200 text-slate-800 font-sans pb-20 relative overflow-x-hidden">
         
         {/* Background Blobs */}
@@ -196,11 +348,11 @@ export default function ErtisHome() {
                 <div className="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center group-hover:scale-105 transition-transform">
                    <ChevronRight className="rotate-180 w-5 h-5"/>
                 </div>
-                <span className="font-semibold tracking-tight">Меню сервисов</span>
+                <span className="font-semibold tracking-tight">{t.back}</span>
              </Link>
              <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-slate-200 shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-xs font-medium text-slate-600">Система активна</span>
+                <span className="text-xs font-medium text-slate-600">{t.aiOnline}</span>
              </div>
           </div>
 
@@ -215,8 +367,8 @@ export default function ErtisHome() {
                     <div className="flex items-center gap-3">
                         <div className="p-2.5 bg-slate-900 text-white rounded-xl"><Scan size={20} /></div>
                         <div>
-                            <h2 className="text-lg font-bold leading-none text-slate-800">Smart Scanner</h2>
-                            <p className="text-xs text-slate-400 font-medium mt-1">AI Meter Recognition</p>
+                            <h2 className="text-lg font-bold leading-none text-slate-800">{t.scannerTitle}</h2>
+                            <p className="text-xs text-slate-400 font-medium mt-1">{t.scannerSubtitle}</p>
                         </div>
                     </div>
                     {/* Meter Type Selector */}
@@ -269,7 +421,7 @@ export default function ErtisHome() {
                                         <UploadCloud size={32} />
                                     </div>
                                 </div>
-                                <p className="text-slate-400 font-medium group-hover/upload:text-white transition-colors">Нажмите для сканирования</p>
+                                <p className="text-slate-400 font-medium group-hover/upload:text-white transition-colors">{t.pressToScan}</p>
                             </div>
                         )}
                         <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
@@ -283,17 +435,17 @@ export default function ErtisHome() {
                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity"><Phone size={80}/></div>
                     <div className="relative z-10">
                         <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mb-4"><span className="font-bold">109</span></div>
-                        <h3 className="font-bold text-lg leading-tight mb-1">iKomek</h3>
-                        <p className="text-red-100 text-xs opacity-90">Единый центр</p>
+                        <h3 className="font-bold text-lg leading-tight mb-1">{t.sosTitle}</h3>
+                        <p className="text-red-100 text-xs opacity-90">{t.sosDesc}</p>
                     </div>
                  </button>
                  <button onClick={() => callService('electrician')} className="relative overflow-hidden bg-white rounded-[2rem] p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                      <div className="absolute right-4 top-4 text-yellow-500 bg-yellow-50 p-3 rounded-2xl group-hover:scale-110 transition-transform"><Zap size={24}/></div>
-                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">Электрик</h3><p className="text-slate-400 text-xs mt-1">Вызов 24/7</p></div>
+                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">{t.elecTitle}</h3><p className="text-slate-400 text-xs mt-1">{t.elecDesc}</p></div>
                  </button>
                  <button onClick={() => callService('plumber')} className="relative overflow-hidden bg-white rounded-[2rem] p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                      <div className="absolute right-4 top-4 text-cyan-500 bg-cyan-50 p-3 rounded-2xl group-hover:scale-110 transition-transform"><Droplets size={24}/></div>
-                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">Сантехник</h3><p className="text-slate-400 text-xs mt-1">Аварийка</p></div>
+                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">{t.plumbTitle}</h3><p className="text-slate-400 text-xs mt-1">{t.plumbDesc}</p></div>
                  </button>
               </div>
             </div>
@@ -308,13 +460,13 @@ export default function ErtisHome() {
                           <div className="w-20 h-20 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
                               <Scan size={32} className="text-slate-300" />
                           </div>
-                          <p className="text-slate-400 font-medium text-sm px-8">Сделайте снимок счетчика для получения данных</p>
+                          <p className="text-slate-400 font-medium text-sm px-8">{t.waitingDesc}</p>
                       </div>
                   ) : (
                       <div className="flex-1 flex flex-col animate-in slide-in-from-bottom duration-500 fade-in">
                           <div className="flex items-start justify-between mb-8">
                              <div>
-                                 <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Прибор учета</h3>
+                                 <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">{t.meterId}</h3>
                                  <div className="flex items-center gap-2 text-slate-800 font-bold text-lg">
                                     {meterConfig[meterType].icon}
                                     {meterConfig[meterType].label}
@@ -324,18 +476,16 @@ export default function ErtisHome() {
                              <div className="bg-emerald-50 text-emerald-600 p-2 rounded-xl"><ShieldCheck size={24} /></div>
                           </div>
 
-                          {/* --- DIGITAL DISPLAY (ГЛАВНОЕ ИЗМЕНЕНИЕ) --- */}
+                          {/* --- DIGITAL DISPLAY --- */}
                           <div className="my-auto">
                               <div className="bg-slate-900 rounded-2xl p-6 shadow-inner relative overflow-hidden group">
                                   <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
-                                  <p className="text-slate-500 text-[10px] font-mono mb-2 text-right">DIGITAL METER</p>
+                                  <p className="text-slate-500 text-[10px] font-mono mb-2 text-right">{t.digitalMeter}</p>
                                   
                                   {/* Контейнер цифр */}
                                   <div className="flex justify-center gap-[2px] sm:gap-1">
                                       {result.split('').map((char, i) => {
                                           const conf = meterConfig[meterType];
-                                          // Определяем, является ли цифра "красной" (десятичной/литрами)
-                                          // Индекс начала красной зоны = (Длина) - (К-во красных)
                                           const isRed = i >= (conf.digits - conf.decimals);
 
                                           return (
@@ -350,7 +500,6 @@ export default function ErtisHome() {
                                                   `}
                                               >
                                                   {char}
-                                                  {/* Разделитель (запятая) перед первой красной цифрой, если нужно визуально отделить */}
                                                   {isRed && i === (conf.digits - conf.decimals) && (
                                                       <div className="absolute -left-[3px] sm:-left-1 bottom-1 w-1 h-1 bg-slate-500 rounded-full"></div>
                                                   )}
@@ -360,20 +509,19 @@ export default function ErtisHome() {
                                   </div>
                               </div>
                               <p className="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1">
-                                  <CheckCircle size={12} className="text-emerald-500"/> Данные верифицированы
+                                  <CheckCircle size={12} className="text-emerald-500"/> {t.verified}
                               </p>
                           </div>
-                          {/* ------------------------------------------- */}
 
                           <div className="mt-auto pt-8">
                               {!isSent ? (
                                   <button onClick={handleSend} className="w-full group relative overflow-hidden bg-slate-900 text-white p-4 rounded-xl font-bold shadow-lg shadow-slate-900/30 hover:shadow-slate-900/50 hover:-translate-y-0.5 transition-all">
-                                      <span className="relative z-10 flex items-center justify-center gap-2">Отправить показания <Send size={18} className="group-hover:translate-x-1 transition-transform"/></span>
+                                      <span className="relative z-10 flex items-center justify-center gap-2">{t.sendBtn} <Send size={18} className="group-hover:translate-x-1 transition-transform"/></span>
                                   </button>
                               ) : (
                                   <div className="w-full p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl font-bold flex flex-col items-center justify-center gap-2 animate-in zoom-in">
                                       <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 mb-1"><CheckCircle size={24} /></div>
-                                      <span>Данные приняты</span>
+                                      <span>{t.sentSuccess}</span>
                                   </div>
                               )}
                           </div>
@@ -394,32 +542,32 @@ export default function ErtisHome() {
                 {serviceModal === 'searching' ? (
                   <div className="py-12">
                       <div className="relative w-32 h-32 mx-auto mb-8">
-                         <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${activeService.bg.replace('400', '500')}`}></div>
-                         <div className="bg-white p-6 rounded-full shadow-lg text-slate-700 relative z-10">{activeService.icon}</div>
+                          <div className={`absolute inset-0 rounded-full animate-ping opacity-20 ${activeService.bg.replace('400', '500')}`}></div>
+                          <div className="bg-white p-6 rounded-full shadow-lg text-slate-700 relative z-10">{activeService.icon}</div>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-800 mb-2">Поиск мастера...</h3>
+                      <h3 className="text-xl font-bold text-slate-800 mb-2">{t.modalSearch}</h3>
                   </div>
                 ) : (
                   <div className="animate-in fade-in zoom-in duration-300">
                       <div className="flex justify-center mb-6">
-                         <div className={`w-24 h-24 rounded-full flex items-center justify-center shadow-xl ${activeService.bg} ${activeService.color} border-4 border-white`}>
-                             {activeService.id === 'sos' ? <Phone size={40} className="text-white"/> : <User size={40} className="text-white"/>}
-                         </div>
+                          <div className={`w-24 h-24 rounded-full flex items-center justify-center shadow-xl ${activeService.bg} ${activeService.color} border-4 border-white`}>
+                              {activeService.id === 'sos' ? <Phone size={40} className="text-white"/> : <User size={40} className="text-white"/>}
+                          </div>
                       </div>
                       <h3 className="text-2xl font-bold text-slate-900 leading-tight">{activeService.name}</h3>
                       <p className="text-slate-500 font-medium mb-6">{activeService.title}</p>
                       
                       {activeService.id !== 'sos' && (
                         <div className="text-left mb-6 group">
-                           <label className="text-xs font-bold text-slate-400 uppercase ml-3 mb-1.5 block">Ваш Адрес</label>
+                           <label className="text-xs font-bold text-slate-400 uppercase ml-3 mb-1.5 block">{t.modalAddress}</label>
                            <div className="relative">
                                <MapPin className="absolute left-4 top-3.5 text-slate-400" size={20} />
-                               <input type="text" placeholder="Адрес..." value={userAddress} onChange={(e) => setUserAddress(e.target.value)} className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl font-medium focus:outline-none focus:ring-2 focus:ring-slate-900" />
+                               <input type="text" placeholder={t.modalAddressPlace} value={userAddress} onChange={(e) => setUserAddress(e.target.value)} className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl font-medium focus:outline-none focus:ring-2 focus:ring-slate-900" />
                            </div>
                         </div>
                       )}
                       <button onClick={handleAction} className={`w-full py-4 rounded-2xl text-white font-bold shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 ${activeService.id === 'sos' ? 'bg-red-600' : 'bg-slate-900'}`}>
-                        {activeService.id === 'sos' ? 'ПОЗВОНИТЬ 109' : 'Вызвать мастера'}
+                        {activeService.id === 'sos' ? t.modalCall109 : t.modalCall}
                       </button>
                   </div>
                 )}
@@ -438,12 +586,12 @@ export default function ErtisHome() {
       
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center gap-4">
           <p className="text-slate-400 font-medium tracking-wide text-center">
-            © 2025 Jana Pavlodar • г. Павлодар • Сделано с ❤️ для жителей Павлодара
+            {t.footerText}
           </p>
       
           <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-default group">
             <span className="text-xs font-bold uppercase tracking-widest text-slate-300 group-hover:text-white transition-colors">
-              Made in Kazakhstan
+              {t.footerMade}
             </span>
       
             <div className="relative flex items-center justify-center">

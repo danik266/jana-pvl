@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image"; // <--- 1. Добавляем импорт Image
 import {
   Globe,
   ChevronDown,
@@ -12,7 +13,6 @@ import {
   Loader2,
   LogIn,
   UserPlus,
-  ArrowLeft,
 } from "lucide-react";
 
 const languages = [
@@ -104,11 +104,13 @@ export default function Header({
   const userName = user?.user_metadata?.full_name || user?.email || "User";
 
   return (
-    <header className="bg-gradient-to-r from-sky-600 via-teal-600 to-sky-600 text-white shadow-lg border-b border-amber-400/20">
+    <header className="bg-gradient-to-r from-sky-600 via-teal-600 to-sky-600 text-white shadow-lg border-b border-amber-400/20 relative z-40">
       <div className="container mx-auto px-3 py-2">
-        <div className="flex items-center justify-between h-14 max-[400px]:justify-end">
-          {/* ЛОГО — скрыть полностью на ширине ≤ 400px */}
-          <div className="leading-tight max-[400px]:hidden">
+        {/* Добавляем relative сюда, чтобы шанырак центрировался относительно этого блока */}
+        <div className="flex items-center justify-between h-14 max-[400px]:justify-end relative">
+          
+          {/* ЛОГО (Текст) */}
+          <div className="leading-tight max-[400px]:hidden z-10">
             <Link href="/">
               <h1 className="text-xl md:text-2xl font-extrabold tracking-tight">
                 JANA PAVLODAR
@@ -119,30 +121,50 @@ export default function Header({
             </p>
           </div>
 
+          {/* --- ЦЕНТРАЛЬНЫЙ ШАНЫРАК --- */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+             <Link href="/">
+                <div className="relative group cursor-pointer">
+                  {/* Эффект свечения сзади */}
+                  <div className="absolute inset-0 bg-amber-400/30 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <Image 
+                    src="/shak.png" 
+                    alt="Shanyrak" 
+                    width={80} 
+                    height={80} 
+                    className="w-8 h-8 sm:w-14 sm:h-14 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-transform duration-700 ease-out "
+                    priority
+                  />
+                </div>
+             </Link>
+          </div>
+          {/* ----------------------------- */}
+
           {/* ПРАВАЯ ПАНЕЛЬ */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 z-10">
             {/* ЯЗЫК */}
             <div className="relative">
               <button
                 onClick={() => setOpenLang(!openLang)}
-                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 text-xs sm:text-sm"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 hover:bg-white/20 rounded-lg border border-white/20 text-xs sm:text-sm transition-colors"
               >
                 <Globe className="w-4 h-4" />
                 {languages.find((l) => l.code === langToUse)?.name.slice(0, 3)}
                 <ChevronDown
-                  className={`w-3 h-3 transition-transform ${
+                  className={`w-3 h-3 transition-transform duration-200 ${
                     openLang ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
               {openLang && (
-                <div className="absolute right-0 mt-2 w-32 sm:w-36 bg-white text-slate-800 rounded-xl shadow-xl z-50 animate-fadeIn">
+                <div className="absolute right-0 mt-2 w-32 sm:w-36 bg-white text-slate-800 rounded-xl shadow-xl z-50 animate-fadeIn overflow-hidden">
                   {languages.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => handleLangClick(l.code)}
-                      className={`block w-full text-left px-4 py-2 text-sm font-semibold hover:bg-sky-50 ${
+                      className={`block w-full text-left px-4 py-2 text-sm font-semibold hover:bg-sky-50 transition-colors ${
                         langToUse === l.code ? "bg-sky-50 text-teal-600" : ""
                       }`}
                     >
@@ -166,30 +188,28 @@ export default function Header({
                   </span>
                 </div>
 
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/20 flex items-center justify-center border border-white/30 backdrop-blur-sm">
                   <User className="w-4 sm:w-5 h-4 sm:h-5" />
                 </div>
 
                 <button
                   onClick={handleLogout}
-                  className="p-2 bg-white/10 hover:bg-red-500/80 rounded-lg border border-white/10"
+                  className="p-2 bg-white/10 hover:bg-red-500/80 rounded-lg border border-white/10 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2 sm:gap-3">
-                {/* ВОЙТИ — всегда отображать */}
                 <Link href="/auth">
-                  <button className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold hover:bg-white/10 rounded-lg">
+                  <button className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold hover:bg-white/10 rounded-lg transition-colors">
                     <LogIn className="w-4 h-4" />
                     {t.login}
                   </button>
                 </Link>
 
-                {/* РЕГИСТРАЦИЯ — уменьшать на малых экранах */}
                 <Link href="/auth">
-                  <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-lg font-bold text-[10px] sm:text-sm flex items-center gap-1 max-[440px]:px-2 max-[440px]:text-[9px]">
+                  <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-amber-400 to-[#eeca00] hover:from-[#dfbe02] hover:to-[#ceaf01] text-white rounded-lg font-bold text-[10px] sm:text-sm flex items-center gap-1 max-[440px]:px-2 max-[440px]:text-[9px] shadow-md transition-all hover:shadow-lg">
                     <UserPlus className="w-4 h-4" />
                     {t.register}
                   </button>
