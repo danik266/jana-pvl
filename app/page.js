@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import { Home, Map, Scale, Construction } from "lucide-react";
-import Header from "./components/Header/page"; // Убедитесь, что путь верный
+import Header from "./components/Header/page"; // Проверь путь
 import Link from "next/link";
 
 export default function App() {
-  // Состояние для выбранного языка: 'kz', 'ru' или 'en'
   const [lang, setLang] = useState("kz");
 
-  // Словарь переводов
   const translations = {
     kz: {
       tag: "Павлодар қаласының ақылды қала жүйесі",
       mainTitle: "Ертіс - Павлодардың Ақылды Қала Платформасы",
-      mainDesc: "Тұрғын үй, туризм, заңгерлік көмек және инфрақұрылымға арналған AI шешімдері.",
+      mainDesc:
+        "Тұрғын үй, туризм, заңгерлік көмек және инфрақұрылымға арналған AI шешімдері.",
       btnOpen: "Ашу",
-      footer: "© 2025 Ertis Smart City Platform • Павлодар қаласы • Павлодар тұрғындары үшін ❤️ жасалған",
+      footer:
+        "© 2025 Ertis Smart City Platform • Павлодар қаласы • Павлодар тұрғындары үшін ❤️ жасалған",
       modules: {
         ErtisHome: {
           title: "Үй және ТКШ",
@@ -43,9 +43,11 @@ export default function App() {
     ru: {
       tag: "Система умного города Павлодар",
       mainTitle: "Ertis - Платформа Умного Города",
-      mainDesc: "AI решения для ЖКХ, туризма, юридической помощи и городской инфраструктуры.",
+      mainDesc:
+        "AI решения для ЖКХ, туризма, юридической помощи и городской инфраструктуры.",
       btnOpen: "Открыть",
-      footer: "© 2025 Ertis Smart City Platform • г. Павлодар • Сделано с ❤️ для жителей Павлодара",
+      footer:
+        "© 2025 Ertis Smart City Platform • г. Павлодар • Сделано с ❤️ для жителей Павлодара",
       modules: {
         ErtisHome: {
           title: "ЖКХ и Услуги",
@@ -72,9 +74,11 @@ export default function App() {
     en: {
       tag: "Pavlodar Smart City System",
       mainTitle: "Ertis - Smart City Platform",
-      mainDesc: "AI-powered solutions for housing, tourism, legal assistance, and infrastructure.",
+      mainDesc:
+        "AI-powered solutions for housing, tourism, legal assistance, and infrastructure.",
       btnOpen: "Open",
-      footer: "© 2025 Ertis Smart City Platform • Pavlodar City • Made with ❤️ for Pavlodar residents",
+      footer:
+        "© 2025 Ertis Smart City Platform • Pavlodar City • Made with ❤️ for Pavlodar residents",
       modules: {
         ErtisHome: {
           title: "Housing & Utilities",
@@ -100,51 +104,23 @@ export default function App() {
     },
   };
 
-  // Получаем текущие тексты на основе выбранного языка
   const t = translations[lang];
 
-  // Массив модулей с динамическими данными
   const modules = [
-    {
-      id: "ErtisHome",
-      icon: Home,
-      ...t.modules.ErtisHome,
-    },
-    {
-      id: "ErtisTour",
-      icon: Map,
-      ...t.modules.ErtisTour,
-    },
-    {
-      id: "ErtisLaw",
-      icon: Scale,
-      ...t.modules.ErtisLaw,
-    },
-    {
-      id: "ErtisRoad",
-      icon: Construction,
-      ...t.modules.ErtisRoad,
-    },
+    { id: "ErtisHome", icon: Home, ...t.modules.ErtisHome },
+    { id: "ErtisTour", icon: Map, ...t.modules.ErtisTour },
+    { id: "ErtisLaw", icon: Scale, ...t.modules.ErtisLaw },
+    { id: "ErtisRoad", icon: Construction, ...t.modules.ErtisRoad },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
-      
-      {/* Подключаем Header и передаем ему управление языком:
-         currentLanguage — текущий язык страницы
-         onLanguageChange — функция для смены языка 
-      */}
-      <Header 
-        currentLanguage={lang} 
-        onLanguageChange={setLang} 
-      />
+    <div className="min-h-screen bg-white">
+      <Header currentLanguage={lang} onLanguageChange={setLang} />
 
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <div className="inline-block mb-4 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border-2 border-sky-200">
-            <span className="text-sky-700 font-semibold">
-              {t.tag}
-            </span>
+          <div className="inline-block mb-4 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border-2 border-[#419181]">
+            <span className="text-[#419181] font-semibold">{t.tag}</span>
           </div>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             {t.mainTitle}
@@ -154,16 +130,16 @@ export default function App() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-8">
           {modules.map((module) => {
             const Icon = module.icon;
             return (
               <Link key={module.id} href={`/${module.id}`}>
-                <div className="group relative bg-white rounded-2xl shadow-lg border-2 border-sky-200 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer text-left h-full flex flex-col">
-                  <div className="absolute inset-0 bg-gradient-to-br from-sky-500 to-cyan-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                <div className="group relative bg-white rounded-2xl shadow-lg border-2 border-[#419181] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 cursor-pointer text-left h-full flex flex-col">
+                  <div className="absolute inset-0 bg-[#419181] opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
 
                   <div className="relative p-8 flex-grow flex flex-col">
-                    <div className="inline-flex p-4 bg-gradient-to-br from-sky-500 to-cyan-500 rounded-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300 w-fit">
+                    <div className="inline-flex p-4 bg-[#419181] rounded-2xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300 w-fit">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
 
@@ -175,7 +151,7 @@ export default function App() {
                     </p>
                     <p className="text-gray-600 mb-6">{module.desc}</p>
 
-                    <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-sky-500 to-cyan-500 text-white px-4 py-2 rounded-lg transition-all duration-300 w-fit">
+                    <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold bg-[#419181] text-white px-4 py-2 rounded-lg transition-all duration-300 w-fit">
                       {t.btnOpen}
                       <span className="group-hover:translate-x-1 transition-transform duration-300">
                         →
@@ -191,15 +167,7 @@ export default function App() {
 
       <footer className="bg-[#419181] text-white py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
-<<<<<<< HEAD
-          <p className="text-white">
-            © 2025 Ertis Smart City Platform • Павлодар қаласы • Сделано с ❤️
-            для жителей Павлодара
-=======
-          <p className="text-sky-100">
-            {t.footer}
->>>>>>> 6181fc0942ccc99e41adaf136250d027e66fbb8e
-          </p>
+          <p>{t.footer}</p>
         </div>
       </footer>
     </div>
