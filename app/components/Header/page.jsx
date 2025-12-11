@@ -53,16 +53,30 @@ const headerTranslations = {
 export default function Header({
   onBackToHome,
   showBackButton,
-  currentLanguage = "kz",
+  currentLanguage: initialLanguage = "kz", // Переименовал проп для ясности
   onLanguageChange,
   onAuthChange,
 }) {
   const router = useRouter();
   const [openLang, setOpenLang] = useState(false);
-  const t = headerTranslations[currentLanguage] || headerTranslations.kz;
-
+  
+  // 1. Внутреннее состояние для языка (по умолчанию то, что пришло из пропсов)
+  const [selectedLang, setSelectedLang] = useState(initialLanguage);
+  
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // 2. При первой загрузке проверяем LocalStorage
+  useEffect(() => {
+    const savedLang = localStorage.getItem("app_language");
+    if (savedLang && ["kz", "ru", "en"].includes(savedLang)) {
+      setSelectedLang(savedLang);
+      // Если родительский компонент требует уведомления, сообщаем ему
+      if (onLanguageChange) {
+        onLanguageChange(savedLang);
+      }
+    }
+  }, [onLanguageChange]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -95,12 +109,18 @@ export default function Header({
   };
 
   function handleLangClick(code) {
+    // 3. Сохраняем в стейт и в LocalStorage
+    setSelectedLang(code);
+    localStorage.setItem("app_language", code);
+
     if (onLanguageChange) {
       onLanguageChange(code);
     }
     setOpenLang(false);
   }
 
+  // Используем selectedLang для выбора переводов
+  const t = headerTranslations[selectedLang] || headerTranslations.kz;
   const userName = user?.user_metadata?.full_name || user?.email || "User";
 
   return (
@@ -115,7 +135,6 @@ export default function Header({
           
           {/* ЛОГОТИП */}
           <div className="flex items-center gap-4">
-            {/* Если нужна иконка логотипа, можно добавить сюда. Пока просто текст */}
             <div className="flex flex-col">
               <Link href="/">
                 <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight hover:opacity-90 transition-opacity drop-shadow-sm">
@@ -153,7 +172,7 @@ export default function Header({
               >
                 <Globe className="w-4 h-4 text-sky-100" />
                 <span className="font-semibold text-sm">
-                  {languages.find((l) => l.code === currentLanguage)?.name.slice(0, 3)}
+                  {languages.find((l) => l.code === selectedLang)?.name.slice(0, 3)}
                 </span>
                 <ChevronDown
                   className={`w-3 h-3 transition-transform text-white/70 ${
@@ -169,11 +188,11 @@ export default function Header({
                       key={l.code}
                       onClick={() => handleLangClick(l.code)}
                       className={`block w-full text-left px-5 py-3 text-sm font-semibold hover:bg-sky-50 transition-colors flex items-center justify-between ${
-                        currentLanguage === l.code ? "bg-sky-50 text-teal-600" : ""
+                        selectedLang === l.code ? "bg-sky-50 text-teal-600" : ""
                       }`}
                     >
                       {l.name}
-                      {currentLanguage === l.code && (
+                      {selectedLang === l.code && (
                         <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
                       )}
                     </button>

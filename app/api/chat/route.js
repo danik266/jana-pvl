@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req) {
   try {
-    // 1. API Кілтін тексеру
+    // 1. Проверка API ключа
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json({ error: "API Key missing" }, { status: 500 });
@@ -17,23 +17,24 @@ export async function POST(req) {
       return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
     }
 
-    // 2. Модельді баптау
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash", 
       systemInstruction: `
-        Сіз — "Jana Pavlodar AI", Павлодар қаласының ресми ақылды көмекшісісіз.
-        Сөйлесу мәнеріңіз: сыпайы, қысқа, нақты және пайдалы.
-        Екі тілде (Қазақша, Орысша) сұрауға байланысты жауап беріңіз.
-        Егер қолданушы сәлемдессе, қысқаша амандасыңыз.
+        Ты — "Jana Pavlodar AI", официальный умный помощник города Павлодар.
+
+        ТВОИ ИНСТРУКЦИИ:
+        1. Язык ответа: Всегда отвечай на том же языке, на котором написал пользователь (если пишут на русском — отвечай на русском, если на казахском — на казахском).
+        2. Форматирование: СТРОГО ЗАПРЕЩЕНО использовать звездочки (** или *), решетки (#) и любое Markdown-форматирование. Пиши ответ только обычным, чистым текстом.
+        3. Стиль: Будь вежливым, кратким, конкретным и полезным. Не лей воду.
+        4. Приветствие: Если пользователь просто здоровается, поздоровайся кратко в ответ.
       `,
     });
 
-    // 3. Соңғы сұрақты алу
+    // 3. Получение последнего сообщения
     const lastMessage = messages[messages.length - 1];
     const lastMessageContent = lastMessage.content || lastMessage.text;
 
-    // 4. ТАРИХТЫ ТАЗАЛАУ (Ең маңызды бөлік!)
-    // Барлық алдыңғы хабарламаларды аламыз
+    // 4. Очистка и форматирование истории чата
     const previousMessages = messages.slice(0, -1);
 
     let formattedHistory = previousMessages.map((msg) => ({
@@ -41,18 +42,17 @@ export async function POST(req) {
       parts: [{ text: msg.content || msg.text }],
     }));
 
-    // ЕРЕЖЕ: Тарих ешқашан 'model'-ден басталмауы керек.
-    // Егер бірінші хабарлама AI-дың сәлемдесуі болса, оны тізімнен алып тастаймыз.
+    // Удаляем сообщения модели из начала списка, если они там есть (правило API)
     while (formattedHistory.length > 0 && formattedHistory[0].role === "model") {
-      formattedHistory.shift(); // Бірінші элементті өшіру
+      formattedHistory.shift();
     }
 
-    // 5. Чатты бастау
+    // 5. Запуск чата
     const chat = model.startChat({
-      history: formattedHistory, // Енді мұнда тек дұрыс тарих бар
+      history: formattedHistory,
     });
 
-    // Хабарлама жіберу
+    // Отправка сообщения
     const result = await chat.sendMessage(lastMessageContent);
     const response = await result.response;
     const text = response.text();
