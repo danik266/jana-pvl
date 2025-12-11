@@ -25,7 +25,7 @@ export default function Header({
   }
 
   return (
-    <header className="bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-500 text-white shadow-lg relative z-50">
+    <header className="bg-[#419181] text-white shadow-lg relative z-50">
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Логотип */}
@@ -36,7 +36,7 @@ export default function Header({
                   JANA PAVLODAR
                 </h1>
               </Link>
-              <p className="text-sky-100 text-xs md:text-sm font-medium opacity-90">
+              <p className="text-white/80 text-xs md:text-sm font-medium">
                 Smart City Pavlodar
               </p>
             </div>
@@ -58,7 +58,7 @@ export default function Header({
               <div className="hidden md:block w-px h-8 bg-white/20"></div>
             )}
 
-            {/* НОВЫЙ КРАСИВЫЙ ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА */}
+            {/* Переключатель языка */}
             <div className="relative">
               <button
                 onClick={() => setOpenLang(!openLang)}
@@ -77,13 +77,13 @@ export default function Header({
 
               {/* Выпадающее меню */}
               {openLang && (
-                <div className="absolute right-0 mt-2 w-36 bg-white text-sky-700 rounded-xl shadow-lg overflow-hidden animate-fadeIn border border-sky-100">
+                <div className="absolute right-0 mt-2 w-36 bg-white text-[#419181] rounded-xl shadow-lg overflow-hidden animate-fadeIn border border-sky-100">
                   {languages.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => changeLang(l.code)}
-                      className={`block w-full text-left px-4 py-2.5 text-sm font-medium hover:bg-sky-50 transition ${
-                        lang === l.code ? "bg-sky-100" : ""
+                      className={`block w-full text-left px-4 py-2.5 text-sm font-medium hover:bg-[#419181]/10 transition ${
+                        lang === l.code ? "bg-[#419181]/20" : ""
                       }`}
                     >
                       {l.name}
@@ -107,7 +107,7 @@ export default function Header({
               </Link>
 
               <Link href="/auth">
-                <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-sky-600 hover:bg-sky-50 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#419181] hover:bg-white/90 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
                   <UserPlus className="w-4 h-4" />
                   <span className="hidden sm:inline">Тіркелу</span>
                   <span className="sm:hidden">Рег-ция</span>
@@ -118,7 +118,7 @@ export default function Header({
         </div>
       </div>
 
-      {/* Анимация для dropdown */}
+      {/* Анимация dropdown */}
       <style>{`
         .animate-fadeIn {
           animation: fadeIn 0.15s ease-out;
