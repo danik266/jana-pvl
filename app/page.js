@@ -169,71 +169,79 @@ export default function App() {
 
 
       {/* === 1. ГЛОБАЛЬНЫЙ ФОН С ВИДЕО (FULL WIDTH) === */}
-      <div className="absolute top-0 left-0 w-full h-[85vh] overflow-hidden z-0">
-        <video
-          className="absolute top-0 left-0 w-full h-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Jana Pavlodar..."
-        >
-          <source src="/videoplayback.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
+      {/* === 1. ВИДЕО ФОН === */}
+{/* Изменено: h-[65vh] для мобильных, h-[85vh] для десктопа */}
+<div className="absolute top-0 left-0 w-full h-[65vh] md:h-[85vh] overflow-hidden z-0">
+  <video
+    className="absolute top-0 left-0 w-full h-full object-cover"
+    autoPlay
+    loop
+    muted
+    playsInline
+    poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Jana Pavlodar..."
+  >
+    <source src="/videoplayback.mp4" type="video/mp4" />
+  </video>
+  <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
 
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
-      </div>
+  {/* Градиент внизу: h-20 для мобильных, h-32 для десктопа */}
+  <div className="absolute bottom-0 left-0 w-full h-20 md:h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
+</div>
 
-      {/* === 2. ФОНОВЫЕ ОРНАМЕНТЫ === */}
-      <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] z-[5] opacity-20 invert filter drop-shadow-lg pointer-events-none">
-        <div className="relative w-full h-full animate-[spin_60s_linear_infinite]">
-          <Image
-            src="/ornament-circle.png"
-            alt="Kazakh Ornament"
-            fill
-            className="object-contain"
-          />
-        </div>
-      </div>
+{/* === 2. ФОНОВЫЕ ОРНАМЕНТЫ === */}
+{/* Изменено: уменьшен размер и скорректирована позиция орнамента для мобильных */}
+<div className="absolute top-[-50px] right-[-50px] md:top-[-100px] md:right-[-100px] w-[250px] h-[250px] md:w-[500px] md:h-[500px] z-[5] opacity-20 invert filter drop-shadow-lg pointer-events-none">
+  <div className="relative w-full h-full animate-[spin_60s_linear_infinite]">
+    <Image
+      src="/ornament-circle.png"
+      alt="Kazakh Ornament"
+      fill
+      className="object-contain"
+    />
+  </div>
+</div>
 
-      <div
-        className="absolute top-[40%] left-0 w-full h-32 z-[5] opacity-[0.07] invert pointer-events-none mix-blend-overlay"
-        style={{
-          backgroundImage: "url('/ornament-strip.png')",
-          backgroundRepeat: "repeat-x",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-        }}
-      ></div>
+<div
+  className="absolute top-[40%] left-0 w-full h-20 md:h-32 z-[5] opacity-[0.07] invert pointer-events-none mix-blend-overlay"
+  style={{
+    backgroundImage: "url('/ornament-strip.png')",
+    backgroundRepeat: "repeat-x",
+    backgroundSize: "contain",
+    backgroundPosition: "center",
+  }}
+></div>
 
-      {/* === 3. ОСНОВНОЙ КОНТЕНТ === */}
-      <div className="relative z-10 flex-grow flex flex-col">
-        <div className="relative z-50 text-white drop-shadow-md">
-          <Header currentLanguage={lang} onLanguageChange={setLang} />
-        </div>
+{/* === 3. ОСНОВНОЙ КОНТЕНТ === */}
+<div className="relative z-10 flex-grow flex flex-col">
+  <div className="relative z-50 text-white drop-shadow-md">
+    <Header currentLanguage={lang} onLanguageChange={setLang} />
+  </div>
 
-        <div className="container mx-auto px-4 pt-32 pb-20 text-center relative">
-          <div className="inline-block mb-6 px-5 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
-            <span className="text-white font-bold tracking-wide uppercase text-sm drop-shadow-sm">
-              {t.tag}
-            </span>
-          </div>
+  {/* Изменено: отступы pt-24 для мобильных, pt-32 для десктопа */}
+  <div className="container mx-auto px-4 pt-24 md:pt-32 pb-12 md:pb-20 text-center relative">
+    
+    <div className="inline-block mb-4 md:mb-6 px-4 py-1.5 md:px-5 md:py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
+      <span className="text-white font-bold tracking-wide uppercase text-xs md:text-sm drop-shadow-sm">
+        {t.tag}
+      </span>
+    </div>
 
-          <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight drop-shadow-lg">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-sky-200">
-              Jana Pavlodar
-            </span>{" "}
-            <span className="block md:inline mt-2 md:mt-0">
-              {t.mainTitle.replace("Jana Pavlodar", "").replace("-", "")}
-            </span>
-          </h2>
+    {/* Изменено: размер шрифта text-3xl (моб) -> text-5xl (планшет) -> text-7xl (ПК) */}
+    <h2 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white mb-4 md:mb-6 tracking-tight leading-tight drop-shadow-lg">
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-sky-200">
+        Jana Pavlodar
+      </span>{" "}
+      <span className="block md:inline mt-1 md:mt-0">
+        {t.mainTitle.replace("Jana Pavlodar", "").replace("-", "")}
+      </span>
+    </h2>
 
-          <p className="text-xl text-slate-100 max-w-3xl mx-auto leading-relaxed font-medium mb-10 drop-shadow-md">
-            {t.mainDesc}
-          </p>
-        </div>
+    {/* Изменено: размер текста описания и отступы */}
+    <p className="text-base sm:text-lg md:text-xl text-slate-100 max-w-3xl mx-auto leading-relaxed font-medium mb-8 md:mb-10 drop-shadow-md px-2">
+      {t.mainDesc}
+    </p>
+  </div>
 
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-20 mt-10">
           {modules.map((module) => {
