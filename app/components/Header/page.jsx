@@ -53,7 +53,8 @@ export default function Header({
   onBackToHome,
   showBackButton,
   currentLanguage = "kz", // Получаем текущий язык от родителя
-  onLanguageChange,       // Получаем функцию смены языка от родителя
+  onLanguageChange, 
+  onAuthChange      // Получаем функцию смены языка от родителя
 }) {
   const router = useRouter();
   const [openLang, setOpenLang] = useState(false);
@@ -68,20 +69,32 @@ export default function Header({
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
       setLoading(false);
+      
+      // 2. СООБЩАЕМ РОДИТЕЛЮ ПРИ ЗАГРУЗКЕ
+      if (onAuthChange) {
+        onAuthChange(currentUser);
+      }
     };
     getUser();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      
+      // 3. СООБЩАЕМ РОДИТЕЛЮ ПРИ ЛЮБОМ ИЗМЕНЕНИИ (вход/выход)
+      if (onAuthChange) {
+        onAuthChange(currentUser);
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [onAuthChange]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
