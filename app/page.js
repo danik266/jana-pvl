@@ -219,7 +219,7 @@ export default function App() {
   </div>
 
   {/* Изменено: отступы pt-24 для мобильных, pt-32 для десктопа */}
-  <div className="container mx-auto px-4 pt-14 md:pt-32 pb-8 md:pb-20 text-center relative">
+  <div className="container mx-auto px-4 pt-14 md:pt-32 pb-2 md:pb-20 text-center relative">
     
     <div className="inline-block mb-4 md:mb-6 px-4 py-1.5 md:px-5 md:py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
       <span className="text-white font-bold tracking-wide uppercase text-xs md:text-sm drop-shadow-sm">
