@@ -7,10 +7,10 @@ import { supabase } from "../../lib/supabaseClient";
 import { 
   MapPin, Star, Coffee, Hotel, Navigation, 
   Camera, Search, ArrowRight, X, 
-  Sparkles, CheckCircle, Loader2, LayoutGrid 
+  Sparkles, CheckCircle, Loader2, LayoutGrid, Lock, UserCircle 
 } from "lucide-react";
 
-// --- ОБНОВЛЕННЫЙ TOAST (с золотой обводкой) ---
+// --- ОБНОВЛЕННЫЙ TOAST ---
 const Toast = ({ message, type = "success" }) => (
   <div className={`fixed bottom-4 right-4 px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 animate-slideIn z-50 border ${type === 'error' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-900 text-white border-amber-500/50'}`}>
     {type === 'success' ? <CheckCircle className="text-amber-400 w-5 h-5" /> : <X className="text-red-500 w-5 h-5" />}
@@ -23,7 +23,8 @@ export default function ErtisTour() {
   const [lang, setLang] = useState("ru");
   const [activeTab, setActiveTab] = useState("all"); 
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Изначально false, так как статика доступна сразу
+  const [isRoutesLoading, setIsRoutesLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
   const [user, setUser] = useState(null); 
@@ -36,7 +37,7 @@ export default function ErtisTour() {
   const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [aiResult, setAiResult] = useState(null);
 
-  // --- БАЗА ДАННЫХ ---
+  // --- БАЗА ДАННЫХ (Публичная) ---
   const staticDb = {
     sights: [
       { id: 1, title: { kz: "Мәшһүр Жүсіп мешіті", ru: "Мечеть Машхур Жусупа", en: "Mashkhur Jusup Mosque" }, desc: { kz: "Бірегей сәулет өнері", ru: "Уникальная архитектура, сердце города", en: "Unique architecture" }, rating: 4.9, image: "/images/mashur.jpg", tags: ["history", "architecture"] },
@@ -55,13 +56,19 @@ export default function ErtisTour() {
     ]
   };
 
+  // --- Загрузка маршрутов ТОЛЬКО если есть User ---
   useEffect(() => {
     const fetchRoutes = async () => {
+      // Added optional chaining check here for safety
       if (!user?.id) {
         setMyRoutes([]);
         return;
       }
-      setIsLoading(true);
+      
+      // Prevent fetching if we are already loading to avoid race conditions
+      if (isRoutesLoading) return; 
+
+      setIsRoutesLoading(true);
       try {
         const { data, error } = await supabase
           .from('user_routes')
@@ -70,6 +77,7 @@ export default function ErtisTour() {
           .order('created_at', { ascending: false });
 
         if (error) {
+          // console.error(error); // Optional: Log to console but avoid UI spam
           showToast("Ошибка загрузки данных", "error");
         } else {
           const formattedRoutes = data.map(row => {
@@ -81,12 +89,14 @@ export default function ErtisTour() {
       } catch (err) {
         console.error(err);
       } finally {
-        setIsLoading(false);
+        setIsRoutesLoading(false);
       }
     };
+    
+    // CHANGE IS HERE: Use [user?.id] instead of [user]
     fetchRoutes();
   }, [user?.id]);
-
+  
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
@@ -97,34 +107,40 @@ export default function ErtisTour() {
       hero: { title: "Павлодарды ашыңыз", subtitle: "Ертіс өңірінің інжу-маржаны", placeholder: "Іздеу...", btn: "Табу" },
       tabs: { all: "Барлық жерлер", sights: "Көрікті жерлер", hotels: "Қонақ үйлер", food: "Тағамдар", routes: "Менің маршруттарым" },
       ai: { title: "AI Гид", desc: "Жеке маршрут құрастырушы", btn: "Маршрут құру", step1: "Не қызықтырады?", step2: "Маршрут құрылуда...", res: "Сіздің маршрутыңыз", save: "Маршрутты сақтау" },
-      ui: { map: "Картадан ашу", details: "Толығырақ", loading: "Деректер жүктелуде...", loginReq: "Маршрут құру үшін жүйеге кіріңіз!" },
+      ui: { map: "Картадан ашу", details: "Толығырақ", loading: "Деректер жүктелуде...", loginReq: "Маршрут құру үшін жүйеге кіріңіз!", loginViewRoutes: "Маршруттарды көру үшін кіріңіз", nothing: "Ештеңе табылмады" },
       interests: { history: "Тарих", nature: "Табиғат", food: "Тағам", art: "Өнер", shopping: "Сауда", relax: "Демалыс" }
     },
     ru: {
       hero: { title: "Откройте Павлодар", subtitle: "Жемчужина Прииртышья", placeholder: "Поиск места...", btn: "Найти" },
       tabs: { all: "Все места", sights: "Достопримечательности", hotels: "Отели", food: "Еда", routes: "Мои Маршруты" },
       ai: { title: "AI Гид", desc: "Персональный конструктор маршрута", btn: "Создать маршрут", step1: "Что вас интересует?", step2: "Генерация маршрута...", res: "Ваш маршрут готов", save: "Сохранить маршрут" },
-      ui: { map: "Открыть карту", details: "Подробнее", loading: "Загрузка данных...", loginReq: "Войдите, чтобы создать маршрут!" },
+      ui: { map: "Открыть карту", details: "Подробнее", loading: "Загрузка данных...", loginReq: "Войдите, чтобы создать маршрут!", loginViewRoutes: "Войдите, чтобы увидеть свои маршруты", nothing: "Ничего не найдено" },
       interests: { history: "История", nature: "Природа", food: "Еда", art: "Искусство", shopping: "Шопинг", relax: "Отдых" }
     },
     en: {
       hero: { title: "Discover Pavlodar", subtitle: "The Pearl of the Irtysh", placeholder: "Search places...", btn: "Find" },
       tabs: { all: "All Places", sights: "Attractions", hotels: "Hotels", food: "Food", routes: "My Routes" },
       ai: { title: "AI Guide", desc: "Personal Route Builder", btn: "Build Route", step1: "Your interests?", step2: "Generating route...", res: "Your Route", save: "Save Route" },
-      ui: { map: "Open Map", details: "Details", loading: "Loading data...", loginReq: "Please login to build a route!" },
+      ui: { map: "Open Map", details: "Details", loading: "Loading data...", loginReq: "Please login to build a route!", loginViewRoutes: "Please login to view your routes", nothing: "Nothing found" },
       interests: { history: "History", nature: "Nature", food: "Food", art: "Art", shopping: "Shopping", relax: "Relax" }
     }
   };
 
   const t = translations[lang];
 
+  // --- ФИЛЬТРАЦИЯ ---
   const filteredItems = useMemo(() => {
     let items = [];
+    
+    // ЛОГИКА: Если выбраны маршруты, но нет юзера -> пустой массив (обработаем в UI)
     if (activeTab === 'routes') {
+      if (!user) return []; 
       items = myRoutes;
     } else if (activeTab === 'all') {
+      // ПУБЛИЧНЫЕ ДАННЫЕ ВСЕГДА ДОСТУПНЫ
       items = [...staticDb.sights, ...staticDb.hotels, ...staticDb.food];
     } else {
+      // ПУБЛИЧНЫЕ ДАННЫЕ ПО КАТЕГОРИЯМ
       items = staticDb[activeTab] || [];
     }
     
@@ -132,7 +148,7 @@ export default function ErtisTour() {
     return items.filter(item => 
       item.title[lang].toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [activeTab, searchQuery, lang, myRoutes]);
+  }, [activeTab, searchQuery, lang, myRoutes, user]); // Добавил user в зависимости
 
   const handleOpenMap = (item) => {
     const name = item.title?.[lang] || item.title?.ru || "";
@@ -140,10 +156,12 @@ export default function ErtisTour() {
     if (!name) return;
     let url = "";
     if (description.includes(" -> ")) {
+      // Это маршрут
       const points = description.split(" -> ");
       const pathParams = points.map(p => encodeURIComponent(`Pavlodar ${p.trim()}`)).join("/");
       url = `https://www.google.com/maps/dir/${pathParams}`;
     } else {
+      // Это одно место
       const query = encodeURIComponent(`Pavlodar ${name}`);
       url = `https://www.google.com/maps/search/?api=1&query=${query}`;
     }
@@ -242,6 +260,118 @@ export default function ErtisTour() {
     }
   };
 
+  // --- ХЕЛПЕР ДЛЯ ОТРИСОВКИ КОНТЕНТА ---
+  const renderContent = () => {
+    // 1. Если выбрана вкладка маршрутов, но пользователь НЕ вошел
+    if (activeTab === 'routes' && !user) {
+      return (
+        <div className="col-span-1 md:col-span-3 py-20 flex flex-col items-center justify-center text-center animate-fadeIn">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+             <Lock className="w-10 h-10 text-gray-400" />
+          </div>
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">
+            {t.ui.loginViewRoutes}
+          </h3>
+          <p className="text-gray-500 max-w-md mx-auto mb-6">
+            {lang === 'ru' 
+              ? "Авторизуйтесь, чтобы создавать, сохранять и просматривать свои уникальные туристические маршруты." 
+              : "Please login to create, save and view your unique travel routes."}
+          </p>
+          <button 
+  // ИЗМЕНЕНИЕ ЗДЕСЬ: используем router.push для перехода на страницу входа
+  onClick={() => router.push('/auth')} 
+  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-xl font-bold text-lg shadow-xl shadow-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-400/50 hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 overflow-hidden"
+>
+  {/* Эффект блика */}
+  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+  
+  <UserCircle className="w-6 h-6" />
+  <span className="relative z-10">
+    {lang === 'ru' ? "Войти / Регистрация" : lang === 'kz' ? "Кіру / Тіркелу" : "Login / Sign Up"}
+  </span>
+</button>
+        </div>
+      );
+    }
+
+    // 2. Если идет загрузка (только для маршрутов, т.к. остальное статика)
+    if (isLoading || (activeTab === 'routes' && isRoutesLoading)) {
+       return (
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            {[1,2,3].map(i => (
+                <div key={i} className="bg-white h-80 rounded-2xl shadow-sm animate-pulse"></div>
+            ))}
+         </div>
+       );
+    }
+
+    // 3. Если ничего не найдено
+    if (filteredItems.length === 0) {
+      return (
+         <div className="col-span-1 md:col-span-3 text-center py-20 opacity-50">
+             <Search className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+             <p>{t.ui.nothing}</p>
+         </div>
+      );
+    }
+
+    // 4. Обычный рендер карточек (работает для всех публичных мест и маршрутов если есть User)
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn w-full">
+         {filteredItems.map((item) => (
+             <div key={item.id || item.db_id} className="group bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/40 overflow-hidden hover:shadow-2xl hover:shadow-cyan-100 transition-all duration-300 hover:-translate-y-2 flex flex-col h-full relative">
+                 {/* Золотая рамка при ховере */}
+                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-400/20 rounded-2xl pointer-events-none transition-all"></div>
+                 
+                 <div className="h-52 overflow-hidden relative">
+                      {item.image ? (
+                         <img src={item.image} alt="pic" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      ) : (
+                         <div className="w-full h-full bg-gradient-to-br from-cyan-100 to-teal-50 flex items-center justify-center">
+                             <MapPin className="w-12 h-12 text-cyan-300" />
+                         </div>
+                      )}
+                      <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow-md text-amber-500">
+                         <Star className="w-3 h-3 fill-amber-500" /> {item.rating}
+                      </div>
+                 </div>
+                 
+                 <div className="p-6 flex-grow flex flex-col">
+                     <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-cyan-700 transition-colors">
+                        {item.title?.[lang] || "Без названия"} 
+                     </h3>
+
+                     <p className="text-gray-500 text-sm mb-4 line-clamp-3">
+                        {item.desc?.[lang] || "Нет описания"}
+                     </p>
+                     
+                     <div className="flex gap-2 mb-6 flex-wrap">
+                         {item.tags?.map(tag => (
+                             <span key={tag} className="text-[10px] uppercase font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-md border border-cyan-100">
+                                 #{tag}
+                             </span>
+                         ))}
+                     </div>
+
+                     <div className="mt-auto pt-4 border-t border-gray-100 flex gap-3">
+                         <button 
+                             onClick={() => handleOpenMap(item)}
+                             className="flex-1 py-2.5 rounded-xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-white hover:text-cyan-600 hover:shadow-md transition-all flex items-center justify-center gap-2 border border-gray-200"
+                         >
+                             <MapPin className="w-4 h-4" /> {t.ui.map}
+                         </button>
+                         {/* Кнопка Бирюзовая */}
+                         <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-cyan-200">
+                             →
+                         </button>
+                     </div>
+                 </div>
+             </div>
+         ))}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-gray-800 selection:bg-cyan-200">
       <Header 
@@ -277,7 +407,7 @@ export default function ErtisTour() {
                {t.hero.subtitle}
             </p>
 
-            {/* SEARCH BAR (Бирюзовый акцент) */}
+            {/* SEARCH BAR */}
             <div className="flex bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-2 transform transition-all hover:scale-[1.01] ring-1 ring-cyan-100">
                 <div className="flex-1 flex items-center px-4">
                     <Search className="w-5 h-5 text-cyan-500" />
@@ -289,7 +419,6 @@ export default function ErtisTour() {
                         className="w-full p-3 bg-transparent outline-none text-gray-700 placeholder-gray-400 font-medium"
                     />
                 </div>
-                {/* Кнопка с градиентом */}
                 <button className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-cyan-500/30">
                     {t.hero.btn}
                 </button>
@@ -299,7 +428,7 @@ export default function ErtisTour() {
 
       <div className="container mx-auto px-4 -mt-12 relative z-20 pb-20">
         
-        {/* --- AI CARD (Градиент Небесный -> Бирюзовый) --- */}
+        {/* --- AI CARD --- */}
         <div 
           className="bg-gradient-to-r from-cyan-600 to-teal-600 rounded-3xl p-1 shadow-2xl mb-12 transform hover:-translate-y-1 transition-transform cursor-pointer group" 
           onClick={handleAiStart}
@@ -346,83 +475,17 @@ export default function ErtisTour() {
              )
            })}
         </div>
-
-        {/* --- CONTENT GRID --- */}
-        {isLoading ? (
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[1,2,3].map(i => (
-                    <div key={i} className="bg-white h-80 rounded-2xl shadow-sm animate-pulse"></div>
-                ))}
-             </div>
-        ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
-                {filteredItems.length > 0 ? filteredItems.map((item) => (
-                    <div key={item.id} className="group bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-200/40 overflow-hidden hover:shadow-2xl hover:shadow-cyan-100 transition-all duration-300 hover:-translate-y-2 flex flex-col h-full relative">
-                        {/* Золотая рамка при ховере */}
-                        <div className="absolute inset-0 border-2 border-transparent group-hover:border-cyan-400/20 rounded-2xl pointer-events-none transition-all"></div>
-                        
-                        <div className="h-52 overflow-hidden relative">
-                             {item.image ? (
-                                <img src={item.image} alt="pic" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-cyan-100 to-teal-50 flex items-center justify-center">
-                                    <MapPin className="w-12 h-12 text-cyan-300" />
-                                </div>
-                             )}
-                             <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow-md text-amber-500">
-                                <Star className="w-3 h-3 fill-amber-500" /> {item.rating}
-                             </div>
-                        </div>
-                        
-                        <div className="p-6 flex-grow flex flex-col">
-                            <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-cyan-700 transition-colors">
-                               {item.title?.[lang] || "Без названия"} 
-                            </h3>
-
-                            <p className="text-gray-500 text-sm mb-4 line-clamp-3">
-                               {item.desc?.[lang] || "Нет описания"}
-                            </p>
-                            
-                            <div className="flex gap-2 mb-6 flex-wrap">
-                                {item.tags?.map(tag => (
-                                    <span key={tag} className="text-[10px] uppercase font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-md border border-cyan-100">
-                                        #{tag}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="mt-auto pt-4 border-t border-gray-100 flex gap-3">
-                                <button 
-                                    onClick={() => handleOpenMap(item)}
-                                    className="flex-1 py-2.5 rounded-xl bg-gray-50 text-gray-600 font-semibold text-sm hover:bg-white hover:text-cyan-600 hover:shadow-md transition-all flex items-center justify-center gap-2 border border-gray-200"
-                                >
-                                    <MapPin className="w-4 h-4" /> {t.ui.map}
-                                </button>
-                                {/* Кнопка Бирюзовая */}
-                                <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-cyan-200">
-                                    →
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )) : (
-                    <div className="col-span-3 text-center py-20 opacity-50">
-                        <Search className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                        <p>{lang === 'ru' ? 'Ничего не найдено' : lang === 'en' ? 'Nothing found' : 'Ештеңе табылмады'}</p>
-                    </div>
-                )}
-            </div>
-        )}
-
+        {renderContent()}
       </div>
-
-      {/* --- MODAL AI --- */}
       {isAiModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
             <div className="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scaleIn relative">
-                <button onClick={() => setIsAiModalOpen(false)} className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition text-white z-10"><X className="w-5 h-5"/></button>
-                
-                {/* Хедер модалки: Градиент Небесно-Бирюзовый */}
+                <button 
+                    onClick={() => setIsAiModalOpen(false)} 
+                    className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition text-white z-50"
+                >
+                    <X className="w-5 h-5"/>
+                </button>
                 <div className="bg-gradient-to-r from-cyan-500 to-teal-600 p-6 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400/20 blur-3xl rounded-full"></div>
                     <h3 className="text-xl font-bold flex items-center gap-2 relative z-10">
@@ -449,7 +512,6 @@ export default function ErtisTour() {
                                     </button>
                                 ))}
                             </div>
-                            {/* Кнопка с Золотым градиентом для действия */}
                             <button onClick={generateMockRoute} className="w-full py-4 bg-gradient-to-r from-amber-400 to-amber-500 text-white rounded-xl font-bold shadow-xl shadow-amber-200 hover:from-amber-500 hover:to-amber-600 transition flex justify-center items-center gap-2">
                                 <Sparkles className="w-4 h-4 text-white" /> {t.ai.btn}
                             </button>

@@ -60,7 +60,6 @@ export default function App() {
       btnOpen: "Открыть",
       footer:
         "© 2025 Jana Pavlodar • г. Павлодар • Сделано с ❤️ для жителей Павлодара",
-      // Добавлено для нового футера
       madeIn: "Made In Kazakhstan",
       modules: {
         ErtisHome: {
@@ -93,7 +92,6 @@ export default function App() {
       btnOpen: "Open",
       footer:
         "© 2025 Jana Pavlodar • Pavlodar City • Made with ❤️ for Pavlodar residents",
-      // Добавлено для нового футера
       madeIn: "Made in Kazakhstan",
       modules: {
         ErtisHome: {
@@ -130,17 +128,14 @@ export default function App() {
   ];
 
   return (
-    // 3. Применяем шрифт ко всему контейнеру через font.className
     <div className={`min-h-screen bg-slate-50 relative overflow-hidden selection:bg-sky-200 selection:text-sky-900 ${font.className} flex flex-col`}>
-
-      {/* Декоративный фон (Blobs) */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-sky-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob"></div>
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-amber-200 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-10 flex-grow"> {/* Добавлено flex-grow */}
+      <div className="relative z-10 flex-grow"> 
         <Header currentLanguage={lang} onLanguageChange={setLang} />
 
         <div className="container mx-auto px-4 py-16">
