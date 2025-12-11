@@ -137,7 +137,7 @@ export default function App() {
             loop
             muted
             playsInline
-            poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Loading..."
+            poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Jana Pavlodar..."
          >
             <source
 
