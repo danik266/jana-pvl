@@ -50,7 +50,7 @@ export default function App() {
         },
         ErtisLaw: {
           title: "Шағымдар мен өтініштер жіберу",
-          subtitle: "Digital Lawyer",
+          subtitle: "Online reception",
           desc: "Заңды шағымдар мен ресми өтініштерді дайындау және жіберу.",
         },
         ErtisAI: {
@@ -83,7 +83,7 @@ export default function App() {
         },
         ErtisLaw: {
           title: "Подача жалоб и заявлений",
-          subtitle: "Онлайн-приёмная",
+          subtitle: "Online reception",
           desc: "Оформление и подача жалоб, обращений и заявлений в соответствующие инстанции.",
         },
         ErtisAI: {
@@ -116,7 +116,7 @@ export default function App() {
         },
         ErtisLaw: {
           title: "Submission of Complaints and Applications",
-          subtitle: "Digital Lawyer",
+          subtitle: "Online reception",
           desc: "Create and submit legal complaints and official applications.",
         },
         ErtisAI: {
