@@ -1,8 +1,12 @@
 "use client";
 
-import { Waves, LogIn, UserPlus, Globe, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient"; // Убедитесь, что путь правильный
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { 
+  Waves, LogIn, UserPlus, Globe, ChevronDown, User, LogOut, Loader2 
+} from "lucide-react";
 
 const languages = [
   { code: "kz", name: "Қазақша" },
@@ -15,14 +19,46 @@ export default function Header({
   showBackButton,
   currentLanguage = "kz",
 }) {
+  const router = useRouter();
   const [openLang, setOpenLang] = useState(false);
   const [lang, setLang] = useState(currentLanguage);
+  
+  // --- НОВЫЕ СОСТОЯНИЯ ДЛЯ АВТОРИЗАЦИИ ---
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Проверка авторизации при загрузке
+  useEffect(() => {
+    // 1. Получаем текущую сессию
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
+    getUser();
+
+    // 2. Слушаем изменения (вход/выход) в реальном времени
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.refresh(); // Обновляем серверные компоненты
+    // router.push("/auth"); // Если нужно перекидывать на вход после выхода (необязательно)
+  };
 
   function changeLang(code) {
     setLang(code);
     setOpenLang(false);
     console.log("Смена языка на:", code);
   }
+
+  // Получаем имя пользователя или email для отображения
+  const userName = user?.user_metadata?.full_name || user?.email || "User";
 
   return (
     <header className="bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-500 text-white shadow-lg relative z-50">
@@ -58,7 +94,7 @@ export default function Header({
               <div className="hidden md:block w-px h-8 bg-white/20"></div>
             )}
 
-            {/* НОВЫЙ КРАСИВЫЙ ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА */}
+            {/* Языковой переключатель */}
             <div className="relative">
               <button
                 onClick={() => setOpenLang(!openLang)}
@@ -75,9 +111,8 @@ export default function Header({
                 />
               </button>
 
-              {/* Выпадающее меню */}
               {openLang && (
-                <div className="absolute right-0 mt-2 w-36 bg-white text-sky-700 rounded-xl shadow-lg overflow-hidden animate-fadeIn border border-sky-100">
+                <div className="absolute right-0 mt-2 w-36 bg-white text-sky-700 rounded-xl shadow-lg overflow-hidden animate-fadeIn border border-sky-100 z-50">
                   {languages.map((l) => (
                     <button
                       key={l.code}
@@ -96,29 +131,56 @@ export default function Header({
             {/* Разделитель */}
             <div className="w-px h-8 bg-white/20"></div>
 
-            {/* Авторизация */}
-            <div className="flex items-center gap-3">
-              <Link href="/auth">
-                <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/10 rounded-lg transition-all group">
-                  <LogIn className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-                  <span className="hidden sm:inline">Кіру</span>
-                  <span className="sm:hidden">Вход</span>
-                </button>
-              </Link>
+            {/* ЛОГИКА АВТОРИЗАЦИИ (ИЗМЕНЕНО) */}
+            {loading ? (
+              // Состояние загрузки (пока проверяем сессию)
+              <div className="opacity-70 flex items-center gap-2">
+                 <Loader2 className="w-5 h-5 animate-spin" />
+              </div>
+            ) : user ? (
+              // --- ЕСЛИ ПОЛЬЗОВАТЕЛЬ АВТОРИЗОВАН ---
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex flex-col items-end mr-1">
+                    <span className="text-sm font-semibold leading-tight">{userName}</span>
+                    <span className="text-[10px] text-sky-100 opacity-80 uppercase tracking-wider">Online</span>
+                </div>
+                
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/30 backdrop-blur-sm">
+                   <User className="w-5 h-5 text-white" />
+                </div>
 
-              <Link href="/auth">
-                <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-sky-600 hover:bg-sky-50 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                  <UserPlus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Тіркелу</span>
-                  <span className="sm:hidden">Рег-ция</span>
+                <button 
+                    onClick={handleLogout}
+                    title="Шығу / Выйти"
+                    className="p-2.5 bg-white/10 hover:bg-red-500/20 hover:text-red-100 text-white rounded-lg transition-all border border-transparent hover:border-red-400/30"
+                >
+                    <LogOut className="w-5 h-5" />
                 </button>
-              </Link>
-            </div>
+              </div>
+            ) : (
+              // --- ЕСЛИ ГОСТЬ (КАК БЫЛО РАНЬШЕ) ---
+              <div className="flex items-center gap-3">
+                <Link href="/auth">
+                  <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white hover:bg-white/10 rounded-lg transition-all group">
+                    <LogIn className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <span className="hidden sm:inline">Кіру</span>
+                    <span className="sm:hidden">Вход</span>
+                  </button>
+                </Link>
+
+                <Link href="/auth">
+                  <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-sky-600 hover:bg-sky-50 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <UserPlus className="w-4 h-4" />
+                    <span className="hidden sm:inline">Тіркелу</span>
+                    <span className="sm:hidden">Рег-ция</span>
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Анимация для dropdown */}
       <style>{`
         .animate-fadeIn {
           animation: fadeIn 0.15s ease-out;
