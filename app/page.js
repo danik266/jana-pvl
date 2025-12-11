@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-// Добавили иконку Bot
 import { Home, Map, Scale, Bot, ArrowRight } from "lucide-react";
 import Header from "./components/Header/page";
 import Link from "next/link";
@@ -42,7 +41,6 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Шағымдар мен өтініштер генераторы",
         },
-        // Обновленный блок ErtisAI
         ErtisAI: {
           title: "Jana Pavlodar AI",
           subtitle: "City Assistant",
@@ -75,7 +73,6 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Генератор жалоб и заявлений",
         },
-        // Обновленный блок ErtisAI
         ErtisAI: {
           title: "AI Ассистент",
           subtitle: "City Assistant",
@@ -108,7 +105,6 @@ export default function App() {
           subtitle: "Digital Lawyer",
           desc: "Complaint and application generator",
         },
-        // Обновленный блок ErtisAI
         ErtisAI: {
           title: "City AI Chat",
           subtitle: "City Assistant",
@@ -124,7 +120,6 @@ export default function App() {
     { id: "ErtisHome", icon: Home, ...t.modules.ErtisHome },
     { id: "ErtisTour", icon: Map, ...t.modules.ErtisTour },
     { id: "ErtisLaw", icon: Scale, ...t.modules.ErtisLaw },
-    // Заменили ID на ErtisAI и иконку на Bot
     { id: "ErtisAI", icon: Bot, ...t.modules.ErtisAI },
   ];
 
@@ -132,6 +127,7 @@ export default function App() {
     <div
       className={`min-h-screen bg-slate-50 relative overflow-hidden selection:bg-sky-200 selection:text-sky-900 ${font.className} flex flex-col`}
     >
+      {/* Фоновые фигуры */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-sky-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob"></div>
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
@@ -141,72 +137,70 @@ export default function App() {
       <div className="relative z-10 flex-grow">
         <Header currentLanguage={lang} onLanguageChange={setLang} />
 
-        <div className="container mx-auto px-4 py-16">
-          {/* Hero Section */}
-          <div className="text-center mb-16 relative">
-            <div className="inline-block mb-6 px-5 py-2 bg-white/70 backdrop-blur-md rounded-full border border-sky-200 shadow-sm">
-              <span className="bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent font-bold tracking-wide uppercase text-sm">
-                {t.tag}
-              </span>
-            </div>
-
-            <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-teal-400 to-sky-500">
-                Jana Pavlodar
-              </span>
-              <span className="text-slate-800"> - </span>
-              {t.mainTitle.replace("Jana Pavlodar -", "")}
-            </h2>
-
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
-              {t.mainDesc}
-            </p>
+        {/* Hero Section */}
+        <div className="container mx-auto px-4 py-16 text-center mb-16">
+          <div className="inline-block mb-6 px-5 py-2 bg-white/70 backdrop-blur-md rounded-full border border-sky-200 shadow-sm">
+            <span className="bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent font-bold tracking-wide uppercase text-sm">
+              {t.tag}
+            </span>
           </div>
 
-          {/* Modules Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            {modules.map((module) => {
-              const Icon = module.icon;
-              return (
-                // Ссылка ведет на папку модуля, например /ErtisAI
-                <Link key={module.id} href={`/${module.id}`}>
-                  <div className="group relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white shadow-xl hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
-                    <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-300/50 rounded-3xl transition-colors duration-500 pointer-events-none" />
-                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out" />
+          <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-teal-400 to-sky-500">
+              Jana Pavlodar
+            </span>{" "}
+            <span className="text-slate-800">
+              - {t.mainTitle.replace("Jana Pavlodar -", "")}
+            </span>
+          </h2>
 
-                    <div className="relative flex-grow flex flex-col">
-                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-teal-400 flex items-center justify-center shadow-lg shadow-sky-200 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                        <Icon className="w-8 h-8 text-white" />
-                      </div>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
+            {t.mainDesc}
+          </p>
+        </div>
 
-                      <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-sky-700 transition-colors">
-                        {module.title}
-                      </h3>
+        {/* Modules Grid */}
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {modules.map((module) => {
+            const Icon = module.icon;
+            return (
+              <Link key={module.id} href={`/${module.id}`}>
+                <div className="group relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white shadow-xl hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
+                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-300/50 rounded-3xl transition-colors duration-500 pointer-events-none" />
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out" />
 
-                      <p className="text-sm font-bold text-amber-500 uppercase tracking-wider mb-3">
-                        {module.subtitle}
-                      </p>
+                  <div className="relative flex-grow flex flex-col">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-teal-400 flex items-center justify-center shadow-lg shadow-sky-200 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
 
-                      <p className="text-slate-500 mb-8 leading-relaxed font-medium">
-                        {module.desc}
-                      </p>
+                    <h3 className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-sky-700 transition-colors">
+                      {module.title}
+                    </h3>
 
-                      <div className="mt-auto">
-                        <button className="inline-flex items-center gap-2 text-sm font-bold text-white px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md shadow-amber-200 transform transition-all duration-300 group-hover:translate-x-1">
-                          {t.btnOpen}
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      </div>
+                    <p className="text-sm font-bold text-amber-500 uppercase tracking-wider mb-3">
+                      {module.subtitle}
+                    </p>
+
+                    <p className="text-slate-500 mb-8 leading-relaxed font-medium">
+                      {module.desc}
+                    </p>
+
+                    <div className="mt-auto">
+                      <button className="inline-flex items-center gap-2 text-sm font-bold text-white px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md shadow-amber-200 transform transition-all duration-300 group-hover:translate-x-1">
+                        {t.btnOpen}
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
-                </Link>
-              );
-            })}
-          </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* Footer */}
       <footer className="relative bg-slate-900 text-white py-10 mt-auto overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500"></div>
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center gap-4">
