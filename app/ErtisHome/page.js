@@ -425,24 +425,44 @@ export default function ErtisHome() {
                 </div>
               </div>
 
-              {/* SERVICES */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 <button onClick={() => callService('sos')} className="relative overflow-hidden bg-gradient-to-br from-red-500 to-red-600 rounded-[2rem] p-6 text-white text-left shadow-lg shadow-red-500/20 hover:shadow-red-500/40 hover:-translate-y-1 transition-all duration-300 group">
+                 
+                 {/* SOS Button - Оставляем большой, но адаптируем */}
+                 <button onClick={() => callService('sos')} className="col-span-1 relative overflow-hidden bg-gradient-to-br from-red-500 to-red-600 rounded-[2rem] p-5 md:p-6 text-white text-left shadow-lg shadow-red-500/20 hover:shadow-red-500/40 hover:-translate-y-1 transition-all duration-300 group">
                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity"><Phone size={80}/></div>
-                    <div className="relative z-10">
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center mb-4"><span className="font-bold">109</span></div>
-                        <h3 className="font-bold text-lg leading-tight mb-1">{t.sosTitle}</h3>
-                        <p className="text-red-100 text-xs opacity-90">{t.sosDesc}</p>
+                    <div className="relative z-10 flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-0">
+                        <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center md:mb-4 shrink-0">
+                           <span className="font-bold text-lg">109</span>
+                        </div>
+                        <div>
+                           <h3 className="font-bold text-lg leading-tight">{t.sosTitle}</h3>
+                           <p className="text-red-100 text-xs opacity-90">{t.sosDesc}</p>
+                        </div>
                     </div>
                  </button>
-                 <button onClick={() => callService('electrician')} className="relative overflow-hidden bg-white rounded-[2rem] p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                     <div className="absolute right-4 top-4 text-yellow-500 bg-yellow-50 p-3 rounded-2xl group-hover:scale-110 transition-transform"><Zap size={24}/></div>
-                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">{t.elecTitle}</h3><p className="text-slate-400 text-xs mt-1">{t.elecDesc}</p></div>
+
+                 {/* Electrician - Исправленный стиль */}
+                 <button onClick={() => callService('electrician')} className="relative overflow-hidden bg-white rounded-[2rem] p-5 md:p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-2xl bg-yellow-50 text-yellow-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Zap size={24}/>
+                     </div>
+                     <div>
+                        <h3 className="font-bold text-slate-800 text-lg leading-tight">{t.elecTitle}</h3>
+                        <p className="text-slate-400 text-xs">{t.elecDesc}</p>
+                     </div>
                  </button>
-                 <button onClick={() => callService('plumber')} className="relative overflow-hidden bg-white rounded-[2rem] p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                     <div className="absolute right-4 top-4 text-cyan-500 bg-cyan-50 p-3 rounded-2xl group-hover:scale-110 transition-transform"><Droplets size={24}/></div>
-                     <div className="mt-12"><h3 className="font-bold text-slate-800 text-lg">{t.plumbTitle}</h3><p className="text-slate-400 text-xs mt-1">{t.plumbDesc}</p></div>
+
+                 {/* Plumber - Исправленный стиль */}
+                 <button onClick={() => callService('plumber')} className="relative overflow-hidden bg-white rounded-[2rem] p-5 md:p-6 text-left border border-slate-100 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex items-center gap-4">
+                     <div className="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Droplets size={24}/>
+                     </div>
+                     <div>
+                        <h3 className="font-bold text-slate-800 text-lg leading-tight">{t.plumbTitle}</h3>
+                        <p className="text-slate-400 text-xs">{t.plumbDesc}</p>
+                     </div>
                  </button>
+
               </div>
             </div>
 

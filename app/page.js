@@ -235,7 +235,7 @@ export default function App() {
           </p>
         </div>
 
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-20 -mt-10">
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-20 mt-10">
           {modules.map((module) => {
             const Icon = module.icon;
             return (
