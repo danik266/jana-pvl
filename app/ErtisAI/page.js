@@ -337,7 +337,7 @@ export default function ErtisAIPage() {
               
               <div className="flex items-center gap-2">
                 <span className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-                  Ertis AI <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-sky-100 text-sky-600">BETA</span>
+                  Jana Pavlodar AI <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-sky-100 text-sky-600">BETA</span>
                 </span>
               </div>
             </div>

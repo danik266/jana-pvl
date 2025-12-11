@@ -27,9 +27,9 @@ export default function App() {
       madeIn: "Made In Kazakhstan",
       modules: {
         ErtisHome: {
-          title: "Үй және ТКШ",
-          subtitle: "Housing & Utilities",
-          desc: "AI есептеуіш оқырманы және квитанция талдауы",
+          title: "Қалалық су және энергетика",
+          subtitle: "Water & Energy",
+          desc: "AI есептегішін оқу құралы және түбіртек талдауы",
         },
         ErtisTour: {
           title: "Туризм және гид",
@@ -59,8 +59,8 @@ export default function App() {
       madeIn: "Made In Kazakhstan",
       modules: {
         ErtisHome: {
-          title: "ЖКХ и Услуги",
-          subtitle: "Housing & Utilities",
+          title: "Городской Водоконал и Энергия",
+          subtitle: "Water & Energy",
           desc: "AI считыватель счетчиков и анализ квитанций",
         },
         ErtisTour: {
@@ -91,8 +91,8 @@ export default function App() {
       madeIn: "Made in Kazakhstan",
       modules: {
         ErtisHome: {
-          title: "Housing & Utilities",
-          subtitle: "Housing & Utilities",
+          title: "City Water and Energy",
+          subtitle: "Water & Energy",
           desc: "AI meter reader and receipt analysis",
         },
         ErtisTour: {
