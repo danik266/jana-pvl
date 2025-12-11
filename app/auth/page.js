@@ -12,7 +12,6 @@ import {
   EyeOff,
   ArrowRight,
   ArrowLeft,
-  ShieldCheck,
   AlertCircle,
   Fingerprint,
   Sparkles,
@@ -86,16 +85,43 @@ export default function AuthPage() {
 
   return (
     <div
-      className={`${montserrat.className} min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden p-4`}
+      className={`${montserrat.className} min-h-screen flex items-center justify-center bg-slate-100 relative overflow-hidden p-4`}
     >
-      {/* Фоновые фигуры */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-200/40 rounded-full blur-[120px]"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-200/40 rounded-full blur-[120px]"></div>
+      {/* === ФОНОВЫЕ КАРТИНКИ (ОРНАМЕНТЫ) === */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        
+        {/* Градиент на фоне */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-50 via-white to-teal-50 -z-20"></div>
+
+        {/* ====================================================================
+            МЕСТО ДЛЯ ВАШЕГО ОРНАМЕНТА №1 (Верхний Левый Угол)
+            ====================================================================
+        */}
+        <img 
+            src="/IMG_6341.png"  // <--- 🔴 ВСТАВЬТЕ СЮДА НАЗВАНИЕ ВАШЕГО ФАЙЛА ИЗ ПАПКИ PUBLIC
+            alt="Kazakh Ornament Top"
+            className="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] md:w-[500px] md:h-[500px] object-contain opacity-20 animate-ornament-breath"
+        />
+
+
+        {/* ====================================================================
+            МЕСТО ДЛЯ ВАШЕГО ОРНАМЕНТА №2 (Нижний Правый Угол)
+            ====================================================================
+        */}
+        <img 
+            src="/Vector (1).png"  // <--- 🔴 ВСТАВЬТЕ СЮДА НАЗВАНИЕ ВТОРОГО ФАЙЛА
+            alt="Kazakh Ornament Bottom"
+            className="absolute bottom-[-5%] right-[-5%] w-[300px] h-[300px] md:w-[600px] md:h-[600px] object-contain opacity-20 animate-ornament-breath-slow"
+        />
+
+      </div>
+      {/* =================================== */}
+
 
       {/* Кнопка "Назад" */}
       <Link
         href="/"
-        className="absolute top-6 left-6 group flex items-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors z-10"
+        className="absolute top-6 left-6 group flex items-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors z-20"
       >
         <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all group-hover:border-cyan-200">
           <ArrowLeft size={20} />
@@ -105,7 +131,7 @@ export default function AuthPage() {
 
       {/* Карточка авторизации */}
       <div className="w-full max-w-md relative z-10 animate-scaleIn">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-cyan-900/10 border border-white/60 overflow-hidden relative">
+        <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl shadow-cyan-900/10 border border-white/70 overflow-hidden relative">
           {/* Верхняя градиентная полоса */}
           <div className="h-2 bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 animate-gradient-x"></div>
 
@@ -278,6 +304,31 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+
+      {/* --- CSS ДЛЯ ВРАЩЕНИЯ (SPIN) --- */}
+      <style jsx>{`
+        /* Вращение по часовой стрелке */
+        @keyframes spinRight {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        /* Вращение против часовой стрелки */
+        @keyframes spinLeft {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
+        }
+        
+        /* Класс для первого орнамента (60s = полный оборот за 60 секунд) */
+        .animate-spin-slow {
+          animation: spinRight 60s linear infinite;
+        }
+
+        /* Класс для второго орнамента (крутится в другую сторону) */
+        .animate-spin-reverse {
+          animation: spinLeft 60s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
