@@ -21,7 +21,7 @@ const translations = {
     previewWait: "Ожидание загрузки изображения...",
     
     // Статусы сканирования
-    statusInit: "Инициализация нейросети...",
+    statusInit: "Анализ фото...",
     statusSearch: "Поиск объектов...",
     statusCheck: "Сверка с базой нарушений...",
     statusReport: "Формирование отчета...",
@@ -50,7 +50,6 @@ const translations = {
     footerText: "© 2025 Jana Pavlodar • г. Павлодар • Сделано с ❤️ для жителей",
     madeIn: "Сделано в Казахстане",
 
-    // ОПИСАНИЯ ДЕФЕКТОВ
     defects: {
       manhole: {
         title: "Открытый люк",
@@ -257,10 +256,6 @@ export default function ErtisInspector() {
     setIsScanning(true);
     setStatusText(t.statusInit); // Используем перевод
 
-    // Имитация этапов анализа (меняем текст по ходу)
-    setTimeout(() => setStatusText(t.statusSearch), 1000);
-    setTimeout(() => setStatusText(t.statusCheck), 2200);
-    setTimeout(() => setStatusText(t.statusReport), 3000);
 
     setTimeout(() => {
       const name = f.name.toLowerCase();
@@ -559,18 +554,7 @@ export default function ErtisInspector() {
           </div>
         </div>
       </div>
-      
-      <style jsx>{`
-        @keyframes scan {
-          0% { top: 0%; opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { top: 100%; opacity: 0; }
-        }
-        .animate-scan {
-          animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-      `}</style>
+
       <footer className="relative bg-slate-900 text-white py-10 mt-auto overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500"></div>
       

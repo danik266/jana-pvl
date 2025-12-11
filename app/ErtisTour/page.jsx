@@ -435,9 +435,9 @@ export default function ErtisTour() {
                             >
                                 <MapPin className="w-4 h-4" /> {t.ui.map}
                             </button>
-                            <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-[#eeca00] text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#eeca00]">
+                            {/* <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-[#eeca00] text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-[#eeca00]">
                                 →
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>

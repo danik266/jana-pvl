@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 1. useEffect қосамыз
 import Image from "next/image";
-import { Home, Map, Scale, Bot, ArrowRight, Play } from "lucide-react";
+import { Home, Map, Scale, Bot, ArrowRight } from "lucide-react";
 import Header from "./components/Header/page";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
@@ -14,6 +14,17 @@ const font = Montserrat({
 
 export default function App() {
   const [lang, setLang] = useState("kz");
+  
+  // 2. Жүктеу экранының күйі (басында true болып тұрады)
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 3. Таймер: Сайт ашылғанда 2.5 секундтан кейін жүктеу экранын өшіреді
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000); 
+    return () => clearTimeout(timer);
+  }, []);
 
   const translations = {
     kz: {
@@ -25,6 +36,7 @@ export default function App() {
       footer:
         "© 2025 Jana Pavlodar • Павлодар қаласы • Павлодар тұрғындары үшін ❤️ жасалған",
       madeIn: "Made In Kazakhstan",
+      loadingText: "Жүктелуде...", // Жаңа аударма
       modules: {
         ErtisHome: {
           title: "Қалалық су және энергетика",
@@ -52,11 +64,12 @@ export default function App() {
       tag: "Система умного города Павлодар",
       mainTitle: "Jana Pavlodar - Платформа Умного Города",
       mainDesc:
-        "AI решения для ЖКХ, туризма, юридической помощи и городской инфраструктуры.",
+        "AI решения для ГорВодоканала, туризма, подача заявлений и городской инфраструктуры.",
       btnOpen: "Открыть",
       footer:
         "© 2025 Jana Pavlodar • г. Павлодар • Сделано с ❤️ для жителей Павлодара",
       madeIn: "Made In Kazakhstan",
+      loadingText: "Загрузка...",
       modules: {
         ErtisHome: {
           title: "Городской Водоконал и Энергия",
@@ -89,6 +102,7 @@ export default function App() {
       footer:
         "© 2025 Jana Pavlodar • Pavlodar City • Made with ❤️ for Pavlodar residents",
       madeIn: "Made in Kazakhstan",
+      loadingText: "Loading...",
       modules: {
         ErtisHome: {
           title: "City Water and Energy",
@@ -117,10 +131,10 @@ export default function App() {
   const t = translations[lang];
 
   const modules = [
-    { id: "ErtisHome", icon: Home, ...t.modules.ErtisHome },
-    { id: "ErtisTour", icon: Map, ...t.modules.ErtisTour },
-    { id: "ErtisLaw", icon: Scale, ...t.modules.ErtisLaw },
     { id: "ErtisAI", icon: Bot, ...t.modules.ErtisAI },
+    { id: "ErtisTour", icon: Map, ...t.modules.ErtisTour },
+    { id: "ErtisHome", icon: Home, ...t.modules.ErtisHome },
+    { id: "ErtisLaw", icon: Scale, ...t.modules.ErtisLaw },
   ];
 
   return (
@@ -128,76 +142,85 @@ export default function App() {
       className={`min-h-screen bg-slate-50 relative overflow-hidden selection:bg-sky-200 selection:text-sky-900 ${font.className} flex flex-col`}
     >
       
-      {/* === 1. ГЛОБАЛЬНЫЙ ФОН С ВИДЕО (FULL WIDTH) === */}
-      <div className="absolute top-0 left-0 w-full h-[85vh] overflow-hidden z-0">
-         {/* Видео слой */}
-         <video
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Jana Pavlodar..."
-         >
-            <source
+      {/* === 4. PRELOADER (Жүктеу экраны) === */}
+      <div 
+        className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br from-sky-500 to-teal-400 transition-all duration-1000 ease-in-out ${
+          isLoading ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Артқы фондағы әлсіз жарық (Glow effect) */}
+        <div className="absolute w-[500px] h-[500px] bg-gradient-to-br from-sky-500 to-teal-400 rounded-full blur-[100px] animate-pulse"></div>
 
-                src="/videoplayback.mp4"
-
-                type="video/mp4"
-
-              />
-         </video>
-         <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
-         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
-
-         {/* Градиентный переход в белый фон страницы снизу */}
-         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
-      </div>
-
-
-      {/* === 2. ФОНОВЫЕ ОРНАМЕНТЫ (ПОВЕРХ ВИДЕО, НО ПОД ТЕКСТОМ) === */}
-      {/* Круглый орнамент */}
-      <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] z-[5] opacity-20 invert filter drop-shadow-lg pointer-events-none">
-          <div className="relative w-full h-full animate-[spin_60s_linear_infinite]">
-            <Image
-              src="/ornament-circle.png"
-              alt="Kazakh Ornament"
-              fill
-              className="object-contain"
-            />
-          </div>
-      </div>
-
-      {/* Полоса орнамента (теперь белая/прозрачная, чтобы было видно на видео) */}
-      <div
-          className="absolute top-[40%] left-0 w-full h-32 z-[5] opacity-[0.07] invert pointer-events-none mix-blend-overlay"
-          style={{
-            backgroundImage: "url('/ornament-strip.png')",
-            backgroundRepeat: "repeat-x",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-          }}
-        ></div>
-
-
-      {/* === 3. ОСНОВНОЙ КОНТЕНТ (Layer 10) === */}
-      <div className="relative z-10 flex-grow flex flex-col">
-        
-        <div className="relative z-50 text-white drop-shadow-md">
-           <Header currentLanguage={lang} onLanguageChange={setLang} />
+        {/* Шаңырақ (немесе Домбыра) суреті */}
+        <div className="relative w-40 h-40 md:w-56 md:h-56">
+           <Image 
+             src="/shak.png" 
+             alt="Loading..."
+             fill
+             className="object-contain animate-[spin_10s_linear_infinite]" 
+           />
         </div>
 
-        {/* Hero Text Section */}
-        {/* Отступ сверху (pt-32), чтобы текст был по центру видео зоны */}
+        {/* Мәтін */}
+        <h1 className="mt-8 text-2xl md:text-3xl font-bold text-white tracking-[0.2em] animate-pulse">
+          JANA PAVLODAR
+        </h1>
+      </div>
+
+
+      {/* === 1. ГЛОБАЛЬНЫЙ ФОН С ВИДЕО (FULL WIDTH) === */}
+      <div className="absolute top-0 left-0 w-full h-[85vh] overflow-hidden z-0">
+        <video
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Jana Pavlodar..."
+        >
+          <source src="/videoplayback.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
+
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
+      </div>
+
+      {/* === 2. ФОНОВЫЕ ОРНАМЕНТЫ === */}
+      <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] z-[5] opacity-20 invert filter drop-shadow-lg pointer-events-none">
+        <div className="relative w-full h-full animate-[spin_60s_linear_infinite]">
+          <Image
+            src="/ornament-circle.png"
+            alt="Kazakh Ornament"
+            fill
+            className="object-contain"
+          />
+        </div>
+      </div>
+
+      <div
+        className="absolute top-[40%] left-0 w-full h-32 z-[5] opacity-[0.07] invert pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage: "url('/ornament-strip.png')",
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+        }}
+      ></div>
+
+      {/* === 3. ОСНОВНОЙ КОНТЕНТ === */}
+      <div className="relative z-10 flex-grow flex flex-col">
+        <div className="relative z-50 text-white drop-shadow-md">
+          <Header currentLanguage={lang} onLanguageChange={setLang} />
+        </div>
+
         <div className="container mx-auto px-4 pt-32 pb-20 text-center relative">
-          
           <div className="inline-block mb-6 px-5 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
             <span className="text-white font-bold tracking-wide uppercase text-sm drop-shadow-sm">
               {t.tag}
             </span>
           </div>
 
-          {/* Заголовок стал белым */}
           <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight drop-shadow-lg">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-sky-200">
               Jana Pavlodar
@@ -212,17 +235,13 @@ export default function App() {
           </p>
         </div>
 
-        {/* Modules Grid - Сдвигаем вверх (-mt-10), чтобы карточки заходили на видео */}
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-20 -mt-10">
           {modules.map((module) => {
             const Icon = module.icon;
             return (
               <Link key={module.id} href={`/${module.id}`}>
                 <div className="group relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl hover:shadow-sky-200/50 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
-                  {/* Эффект свечения при наведении */}
                   <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-400/30 rounded-3xl transition-colors duration-500 pointer-events-none" />
-                  
-                  {/* Декор внутри карточки */}
                   <div className="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 ease-out" />
 
                   <div className="relative flex-grow flex flex-col">
@@ -256,11 +275,8 @@ export default function App() {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="relative bg-slate-900 text-white py-10 mt-auto overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500 z-10"></div>
-
-        {/* Фоновый узор в футере */}
         <div
           className="absolute inset-0 opacity-5 pointer-events-none grayscale"
           style={{

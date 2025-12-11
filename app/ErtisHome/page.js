@@ -291,12 +291,8 @@ export default function ErtisHome() {
     setStatusText(t.init);
 
     try {
-      setStatusText(t.searching);
-      await new Promise(r => setTimeout(r, 800));
       setStatusText(t.ocr);
-      await new Promise(r => setTimeout(r, 1000));
-      setStatusText(t.verify);
-      await new Promise(r => setTimeout(r, 700));
+      await new Promise(r => setTimeout(r, 3000));
 
       let finalNumber = "";
       if (meterType === 'water' || meterType === 'heat') {
