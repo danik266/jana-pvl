@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Home, Map, Scale, Bot, ArrowRight } from "lucide-react";
+import { Home, Map, Scale, Bot, ArrowRight, Play } from "lucide-react";
 import Header from "./components/Header/page";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
@@ -37,9 +37,9 @@ export default function App() {
           desc: "Көрікті жерлер картасы, қонақ үйлер және маршруттар",
         },
         ErtisLaw: {
-          title: "Цифрлық заңгер",
+          title: "Шағымдар мен өтініштер жіберу",
           subtitle: "Digital Lawyer",
-          desc: "Шағымдар мен өтініштер генераторы",
+          desc: "Заңды шағымдар мен ресми өтініштерді дайындау және жіберу.",
         },
         ErtisAI: {
           title: "Jana Pavlodar AI",
@@ -69,9 +69,9 @@ export default function App() {
           desc: "Карта достопримечательностей, отели и маршруты",
         },
         ErtisLaw: {
-          title: "Цифровой Юрист",
-          subtitle: "Digital Lawyer",
-          desc: "Генератор жалоб и заявлений",
+          title: "Подача жалоб и заявлений",
+          subtitle: "Онлайн-приёмная",
+          desc: "Оформление и подача жалоб, обращений и заявлений в соответствующие инстанции.",
         },
         ErtisAI: {
           title: "AI Ассистент",
@@ -101,9 +101,9 @@ export default function App() {
           desc: "Sights map, hotels, and tourist routes",
         },
         ErtisLaw: {
-          title: "Digital Lawyer",
+          title: "Submission of Complaints and Applications",
           subtitle: "Digital Lawyer",
-          desc: "Complaint and application generator",
+          desc: "Create and submit legal complaints and official applications.",
         },
         ErtisAI: {
           title: "City AI Chat",
@@ -127,47 +127,109 @@ export default function App() {
     <div
       className={`min-h-screen bg-slate-50 relative overflow-hidden selection:bg-sky-200 selection:text-sky-900 ${font.className} flex flex-col`}
     >
-      {/* Фоновые фигуры */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-sky-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob"></div>
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-amber-200 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-blob animation-delay-4000"></div>
+      
+      {/* === 1. ГЛОБАЛЬНЫЙ ФОН С ВИДЕО (FULL WIDTH) === */}
+      <div className="absolute top-0 left-0 w-full h-[85vh] overflow-hidden z-0">
+         {/* Видео слой */}
+         <video
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Loading..."
+         >
+            {/* ВАЖНО: Замените src на ваше видео файла.
+               Пока поставил красивое абстрактное видео города/технологий для примера.
+            */}
+            <source
+
+                src="/videoplayback.mp4"
+
+                type="video/mp4"
+
+              />
+         </video>
+
+         {/* Темный оверлей поверх видео, чтобы текст читался (синий оттенок) */}
+         <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
+
+         {/* Градиентный переход в белый фон страницы снизу */}
+         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-50 to-transparent"></div>
       </div>
 
-      <div className="relative z-10 flex-grow">
-        <Header currentLanguage={lang} onLanguageChange={setLang} />
 
-        {/* Hero Section */}
-        <div className="container mx-auto px-4 py-16 text-center mb-16">
-          <div className="inline-block mb-6 px-5 py-2 bg-white/70 backdrop-blur-md rounded-full border border-sky-200 shadow-sm">
-            <span className="bg-gradient-to-r from-sky-600 to-teal-600 bg-clip-text text-transparent font-bold tracking-wide uppercase text-sm">
+      {/* === 2. ФОНОВЫЕ ОРНАМЕНТЫ (ПОВЕРХ ВИДЕО, НО ПОД ТЕКСТОМ) === */}
+      {/* Круглый орнамент */}
+      <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] z-[5] opacity-20 invert filter drop-shadow-lg pointer-events-none">
+          <div className="relative w-full h-full animate-[spin_60s_linear_infinite]">
+            <Image
+              src="/ornament-circle.png"
+              alt="Kazakh Ornament"
+              fill
+              className="object-contain"
+            />
+          </div>
+      </div>
+
+      {/* Полоса орнамента (теперь белая/прозрачная, чтобы было видно на видео) */}
+      <div
+          className="absolute top-[40%] left-0 w-full h-32 z-[5] opacity-[0.07] invert pointer-events-none mix-blend-overlay"
+          style={{
+            backgroundImage: "url('/ornament-strip.png')",
+            backgroundRepeat: "repeat-x",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+          }}
+        ></div>
+
+
+      {/* === 3. ОСНОВНОЙ КОНТЕНТ (Layer 10) === */}
+      <div className="relative z-10 flex-grow flex flex-col">
+        
+        {/* Header - теперь он лежит поверх видео */}
+        <div className="text-white drop-shadow-md">
+           <Header currentLanguage={lang} onLanguageChange={setLang} />
+        </div>
+
+        {/* Hero Text Section */}
+        {/* Отступ сверху (pt-32), чтобы текст был по центру видео зоны */}
+        <div className="container mx-auto px-4 pt-32 pb-20 text-center relative">
+          
+          <div className="inline-block mb-6 px-5 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 shadow-lg">
+            <span className="text-white font-bold tracking-wide uppercase text-sm drop-shadow-sm">
               {t.tag}
             </span>
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-500 via-teal-400 to-sky-500">
+          {/* Заголовок стал белым */}
+          <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight drop-shadow-lg">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-sky-200">
               Jana Pavlodar
             </span>{" "}
-            <span className="text-slate-800">
-              - {t.mainTitle.replace("Jana Pavlodar -", "")}
+            <span className="block md:inline mt-2 md:mt-0">
+              {t.mainTitle.replace("Jana Pavlodar", "").replace("-", "")}
             </span>
           </h2>
 
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
+          <p className="text-xl text-slate-100 max-w-3xl mx-auto leading-relaxed font-medium mb-10 drop-shadow-md">
             {t.mainDesc}
           </p>
         </div>
 
-        {/* Modules Grid */}
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* Modules Grid - Сдвигаем вверх (-mt-10), чтобы карточки заходили на видео */}
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 relative z-20 -mt-10">
           {modules.map((module) => {
             const Icon = module.icon;
             return (
               <Link key={module.id} href={`/${module.id}`}>
-                <div className="group relative bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-white shadow-xl hover:shadow-2xl hover:shadow-sky-100 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
-                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-300/50 rounded-3xl transition-colors duration-500 pointer-events-none" />
-                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 ease-out" />
+                <div className="group relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl hover:shadow-sky-200/50 transition-all duration-500 cursor-pointer overflow-hidden h-full flex flex-col">
+                  {/* Эффект свечения при наведении */}
+                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-400/30 rounded-3xl transition-colors duration-500 pointer-events-none" />
+                  
+                  {/* Декор внутри карточки */}
+                  <div className="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-sky-100 to-teal-50 rounded-full opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-700 ease-out" />
 
                   <div className="relative flex-grow flex flex-col">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-teal-400 flex items-center justify-center shadow-lg shadow-sky-200 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
@@ -187,7 +249,7 @@ export default function App() {
                     </p>
 
                     <div className="mt-auto">
-                      <button className="inline-flex items-center gap-2 text-sm font-bold text-white px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 shadow-md shadow-amber-200 transform transition-all duration-300 group-hover:translate-x-1">
+                      <button className="inline-flex items-center gap-2 text-sm font-bold text-white px-6 py-3 rounded-xl bg-[#eeca00] hover:bg-[#ffd900] shadow-md shadow-amber-200 transform transition-all duration-300 group-hover:translate-x-1">
                         {t.btnOpen}
                         <ArrowRight className="w-4 h-4" />
                       </button>
@@ -202,7 +264,18 @@ export default function App() {
 
       {/* Footer */}
       <footer className="relative bg-slate-900 text-white py-10 mt-auto overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-amber-400 to-teal-500 z-10"></div>
+
+        {/* Фоновый узор в футере */}
+        <div
+          className="absolute inset-0 opacity-5 pointer-events-none grayscale"
+          style={{
+            backgroundImage: "url('/ornament-strip.png')",
+            backgroundRepeat: "repeat",
+            backgroundSize: "300px",
+          }}
+        ></div>
+
         <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center gap-4">
           <p className="text-slate-400 font-medium tracking-wide text-center">
             {t.footer}
