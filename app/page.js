@@ -91,11 +91,11 @@ export default function App() {
         </div>
       </div>
 
-      <footer className="bg-gradient-to-r from-sky-600 via-sky-500 to-cyan-500 text-white py-6 mt-12">
+      <footer className="bg-[#419181] text-white py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sky-100">
-            © 2025 Ertis Smart City Platform • Павлодар қаласы • Сделано с ❤️ для
-            жителей Павлодара
+          <p className="text-white">
+            © 2025 Ertis Smart City Platform • Павлодар қаласы • Сделано с ❤️
+            для жителей Павлодара
           </p>
         </div>
       </footer>
