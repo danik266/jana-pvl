@@ -139,9 +139,6 @@ export default function App() {
             playsInline
             poster="https://placehold.co/1920x1080/0f172a/0284c7?text=Loading..."
          >
-            {/* ВАЖНО: Замените src на ваше видео файла.
-               Пока поставил красивое абстрактное видео города/технологий для примера.
-            */}
             <source
 
                 src="/videoplayback.mp4"
@@ -150,8 +147,6 @@ export default function App() {
 
               />
          </video>
-
-         {/* Темный оверлей поверх видео, чтобы текст читался (синий оттенок) */}
          <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-black/30"></div>
 
@@ -188,8 +183,7 @@ export default function App() {
       {/* === 3. ОСНОВНОЙ КОНТЕНТ (Layer 10) === */}
       <div className="relative z-10 flex-grow flex flex-col">
         
-        {/* Header - теперь он лежит поверх видео */}
-        <div className="text-white drop-shadow-md">
+        <div className="relative z-50 text-white drop-shadow-md">
            <Header currentLanguage={lang} onLanguageChange={setLang} />
         </div>
 

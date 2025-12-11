@@ -12,7 +12,6 @@ import {
   EyeOff,
   ArrowRight,
   ArrowLeft,
-  ShieldCheck,
   AlertCircle,
   Fingerprint,
   Sparkles,
@@ -85,19 +84,21 @@ export default function AuthPage() {
   };
 
   return (
-    <div
+   <div
+
       className={`${montserrat.className} min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden p-4`}
+
     >
-      {/* Фоновые фигуры */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-200/40 rounded-full blur-[120px]"></div>
+<div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-200/40 rounded-full blur-[120px]"></div>
+
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-teal-200/40 rounded-full blur-[120px]"></div>
 
       {/* Кнопка "Назад" */}
       <Link
         href="/"
-        className="absolute top-6 left-6 group flex items-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors z-10"
+        className="absolute top-6 left-6 group flex items-center gap-2 text-gray-500 hover:text-amber-600 transition-colors z-10"
       >
-        <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all group-hover:border-cyan-200">
+        <div className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:shadow-md transition-all group-hover:border-amber-200">
           <ArrowLeft size={20} />
         </div>
         <span className="font-medium hidden sm:block">На главную</span>
@@ -105,14 +106,14 @@ export default function AuthPage() {
 
       {/* Карточка авторизации */}
       <div className="w-full max-w-md relative z-10 animate-scaleIn">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-cyan-900/10 border border-white/60 overflow-hidden relative">
-          {/* Верхняя градиентная полоса */}
+        <div className="bg-white rounded-3xl shadow-2xl shadow-amber-900/5 border border-white/60 overflow-hidden relative">
+          {/* Верхняя градиентная полоса (Золото + Бирюза) */}
           <div className="h-2 bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-400 animate-gradient-x"></div>
 
           <div className="p-8 pb-2 text-center">
-            {/* Лого */}
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-50 to-teal-50 border border-cyan-100 mb-6 shadow-inner">
-              <Sparkles className="w-8 h-8 text-cyan-500 animate-pulse" />
+            {/* Лого (Золотой стиль) */}
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-yellow-50 border border-amber-100 mb-6 shadow-inner">
+              <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
             </div>
 
             <h2 className="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight">
@@ -151,7 +152,7 @@ export default function AuthPage() {
                 </label>
                 <div className="relative group">
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-500 transition-colors"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-500 transition-colors"
                     size={20}
                   />
                   <input
@@ -160,7 +161,7 @@ export default function AuthPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Асқаров Асқар"
-                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-400 transition-all focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition-all focus:bg-white"
                   />
                 </div>
               </div>
@@ -172,7 +173,7 @@ export default function AuthPage() {
                 </label>
                 <div className="relative group">
                   <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-500 transition-colors"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-500 transition-colors"
                     size={20}
                   />
                   <input
@@ -181,7 +182,7 @@ export default function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-400 transition-all focus:bg-white"
+                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition-all focus:bg-white"
                   />
                 </div>
               </div>
@@ -193,7 +194,7 @@ export default function AuthPage() {
                 </label>
                 <div className="relative group">
                   <Lock
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-cyan-500 transition-colors"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-500 transition-colors"
                     size={20}
                   />
                   <input
@@ -202,23 +203,23 @@ export default function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-400 transition-all focus:bg-white"
+                    className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-gray-800 font-semibold placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-400 transition-all focus:bg-white"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-cyan-600 focus:outline-none transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-600 focus:outline-none transition-colors"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
               </div>
 
-              {/* Submit */}
+              {/* Submit (Золотая кнопка) */}
               <div className="pt-2">
                 <button
                   disabled={loading}
-                  className="w-full group relative overflow-hidden bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-bold text-lg py-4 px-6 rounded-xl shadow-xl shadow-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-400/40 hover:-translate-y-1 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300"
+                  className="w-full group relative overflow-hidden bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 text-white font-bold text-lg py-4 px-6 rounded-xl shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-400/40 hover:-translate-y-1 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                   <span className="relative flex items-center justify-center gap-2">
@@ -249,7 +250,7 @@ export default function AuthPage() {
               </div>
             </div>
 
-            {/* eGov Button */}
+            {/* eGov Button (Оставили синим, так как это бренд) */}
             <button
               onClick={handleEGovLogin}
               type="button"
@@ -261,14 +262,14 @@ export default function AuthPage() {
               <span className="text-sm">eGov Mobile Login</span>
             </button>
 
-            {/* Bottom link */}
+            {/* Bottom link (Золотой акцент) */}
             <div className="mt-8 text-center">
               <p className="text-gray-500 text-sm mb-2">
                 {isLogin ? "Аккаунтыңыз жоқ па?" : "Аккаунтыңыз бар ма?"}
               </p>
               <button
                 onClick={toggleMode}
-                className="text-cyan-600 hover:text-teal-600 font-bold transition-colors text-sm hover:underline decoration-2 underline-offset-4"
+                className="text-amber-600 hover:text-amber-700 font-bold transition-colors text-sm hover:underline decoration-2 underline-offset-4 decoration-amber-200"
               >
                 {isLogin
                   ? "Тіркелу (Зарегистрироваться)"
