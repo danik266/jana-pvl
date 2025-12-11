@@ -11,7 +11,7 @@ import {
   LogOut,
   Loader2,
   LogIn,
-  UserPlus
+  UserPlus,
 } from "lucide-react";
 
 // Метаданные языков
@@ -53,12 +53,12 @@ export default function Header({
   onBackToHome,
   showBackButton,
   currentLanguage = "kz", // Получаем текущий язык от родителя
-  onLanguageChange,       // Получаем функцию смены языка от родителя
+  onLanguageChange, // Получаем функцию смены языка от родителя
 }) {
   const router = useRouter();
   const [openLang, setOpenLang] = useState(false);
-  
-  // ПРИМЕЧАНИЕ: Мы убрали локальный useState для lang. 
+
+  // ПРИМЕЧАНИЕ: Мы убрали локальный useState для lang.
   // Теперь мы полностью зависим от currentLanguage, который пришел из props.
 
   // Получаем переводы для текущего языка
@@ -70,13 +70,17 @@ export default function Header({
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
     };
     getUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
 
@@ -102,7 +106,6 @@ export default function Header({
     <header className="bg-[#419181] text-white shadow-lg relative z-50">
       <div className="container mx-auto px-4 py-4 md:py-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          
           {/* Лого */}
           <div className="flex items-center gap-3">
             <Link href="/">
@@ -201,7 +204,7 @@ export default function Header({
                   </button>
                 </Link>
                 <Link href="/auth">
-                  <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-sky-600 hover:bg-sky-50 rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                  <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#419181] hover:bg-[#e0f7f6] rounded-lg font-bold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
                     <UserPlus className="w-4 h-4" />
                     <span>{t.register}</span>
                   </button>
